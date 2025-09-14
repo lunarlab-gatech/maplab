@@ -9,7 +9,22 @@
  * **July 2018:** Check out our release candidate with improved localization and lots of new features! [Release 1.3](https://github.com/ethz-asl/maplab/releases/tag/1.3).
  * **May 2018:** maplab was presented at [ICRA](https://icra2018.org/) in Brisbane. [Paper](https://arxiv.org/abs/1711.10250) / [Initial Release](https://github.com/ethz-asl/maplab/releases/tag/initial_release).
 
+## Setup Docker
+Navigate to the `docker` directory. Log in to the user that you want the docker file to create in the container. Then, edit the `DOCKERFILE` to update these lines:
+- `ARG USERNAME=`: Your username
+- `ARG USER_UID=`: Output of `echo $UID`
+- `ARG USER_GID=`: Output of `id -g`
 
+Edit the `enter_container.sh` script with the following paths:
+- `DATA_DIR=`: The directory where the HERCULES dataset is located
+- `REPO_DIR=`: The directory of this repository
+
+Now, run the following commands:
+```
+build_container.sh
+run_container.sh
+```
+Use enter_container.sh to attach to container when already running.
 
 ## Description
 

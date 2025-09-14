@@ -1,0 +1,1 @@
+docker start maplab && docker exec -it maplab /bin/bash
