@@ -1,0 +1,67 @@
+sensors:
+  - id: abeefcde1a2b4c6d9f3a7b1c5e6d8f21
+    topic: /imu0
+    description: "Drone1 IMU"
+    sensor_type: IMU
+    sigmas:
+      acc_noise_density: 0.004
+      acc_bias_random_walk_noise_density: 0.0004
+      gyro_noise_density: 0.0002
+      gyro_bias_random_walk_noise_density: 0.00002
+
+    saturation_accel_max_mps2: 1000000.0
+    saturation_gyro_max_radps: 1000000.0
+    gravity_magnitude_mps2: 9.81
+
+  - id: f5310313af0f4a789b2c1d4e6f8a3c5b
+    sensor_type: NCAMERA
+    description: "Forward camera"
+    topic: ""
+    cameras:
+      - camera:
+          id: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
+          sensor_type: CAMERA
+          description: "Forward camera"
+          topic: /cam0
+          line-delay-nanoseconds: 0
+          image_width: 752
+          image_height: 480
+          type: "pinhole"
+          intrinsics:
+            rows: 4
+            cols: 1
+            data: [376.0, 376.0, 376.0, 240.0] # [fx, fy, cx, cy]
+          distortion:
+            type: radial-tangential 
+            parameters: 
+              cols: 1
+              rows: 4
+              data: [0.0, 0.0, 0.0, 0.0]
+        T_B_C:
+          rows: 4
+          cols: 4
+          data: [0.0, 0.17364818, 0.98480775, 0.35,
+                1.0, 0.0,        0.0,        0.0,
+                0.0, 0.98480775, -0.17364818, 0.1,
+                0.0, 0.0,        0.0,        1.0]
+extrinsics:
+  - sensor_id: abeefcde1a2b4c6d9f3a7b1c5e6d8f21
+    base_sensor_id: abeefcde1a2b4c6d9f3a7b1c5e6d8f21
+    T_B_S:
+      rows: 4
+      cols: 4
+      data: [1.0, 0.0, 0.0, 0.0,
+             0.0, 1.0, 0.0, 0.0,
+             0.0, 0.0, 1.0, 0.0,
+             0.0, 0.0, 0.0, 1.0]
+
+  - sensor_id: f5310313af0f4a789b2c1d4e6f8a3c5b
+    base_sensor_id: abeefcde1a2b4c6d9f3a7b1c5e6d8f21
+    T_B_S:
+      rows: 4
+      cols: 4
+      data: [0.0, 0.17364818, 0.98480775, 0.35,
+             1.0, 0.0,        0.0,        0.0,
+             0.0, 0.98480775, -0.17364818, 0.1,
+             0.0, 0.0,        0.0,        1.0]
+
