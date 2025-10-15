@@ -1,9 +1,9 @@
-export LOCALIZATION_MAP_OUTPUT=/data/map_output/test
+export LOCALIZATION_MAP_OUTPUT=/data/rovioli/euroc_localization_map
 rosrun rovioli rovioli \
   --alsologtostderr=1 \
   --v=2 \
   --sensor_calibration_file=$ROVIO_CONFIG_DIR/sensor-calibration-custom.yaml \
-  --external_imu_parameters_rovio=$ROVIO_CONFIG_DIR/imu-adis16488-2.yaml \
+  rovi--external_imu_parameters_rovio=$ROVIO_CONFIG_DIR/imu-adis16488-2.yaml \
   --datasource_type="rostopic" \
   --save_map_folder=$LOCALIZATION_MAP_OUTPUT \
   --map_builder_save_image_as_resources=false \

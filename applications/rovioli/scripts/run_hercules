@@ -1,4 +1,4 @@
-export LOCALIZATION_MAP_OUTPUT=/data/map_output/drone1
+export LOCALIZATION_MAP_OUTPUT=/data/rovioli
 rosrun rovioli rovioli \
   --alsologtostderr=1 \
   --v=2 \
