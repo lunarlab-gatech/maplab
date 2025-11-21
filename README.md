@@ -35,7 +35,30 @@ enter_container.sh
 
 ### Maplab Install
 
-Clone the respostory into the `src` folder, and then run the following command:
+Clone this respostory into the `src` folder, and then run this command from the root directory of the ros workspace:
 ```
 catkin build maplab
 ```
+
+## Examples
+
+### EuRoC Dataset
+
+First, make changes to the following variables (to update data and user directory names):
+```
+maplab_server_merged_map_folder (applications/maplab-server-node/cfg/maplab_server_ros_params.yaml)
+euroc_bags_folder (applications/maplab-server-node/launch/euroc/euroc-maplab-server-robots.launch)
+euroc_root_map_directory (applications/maplab-server-node/launch/euroc/euroc-maplab-server-robots.launch)
+```
+
+Then run the following command to run maplab:
+```
+tmuxp load applications/maplab-server-node/launch/euroc/euroc_tmuxp_launch.yaml
+```
+
+After that, run the maplab-console with the following:
+```
+applications/maplab-server-node/launch/euroc/euroc_vis_map.yaml
+```
+
+The maplab-console will specify where the output trajectories were saved.
