@@ -2,9 +2,7 @@
 # ROS Noetic Base + Maplab Docker
 # ===============================
 
-
 FROM ros:noetic-ros-base-focal
-
 
 # Set user arguments (being username, echo $UID, and id -g)
 ARG USERNAME=dbutterfield3
@@ -27,10 +25,10 @@ WORKDIR /home/${USERNAME}
 
 
 ENV DEBIAN_FRONTEND=noninteractive
-ARG CATKIN_WS=/root/maplab_ws
+ARG CATKIN_WS=/home/${USERNAME}/maplab_ws
 
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
     # Core Build Tools
     build-essential \
     cmake \
@@ -89,7 +87,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-noetic-octomap-msgs \
     ros-noetic-interactive-markers \
     ros-noetic-roslint \
-    && rm -rf /var/lib/apt/lists/* \
+    && sudo rm -rf /var/lib/apt/lists/* \
     && pip3 install --no-cache-dir requests
 
 
@@ -101,27 +99,24 @@ RUN echo "export USER=${USERNAME}" >> ~/.bashrc
 
 
 RUN rosdep init || true && rosdep update
-RUN echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc
+RUN sudo bash -c 'echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc'
 
 # Enable ccache for faster rebuilds
-RUN echo 'export PATH="/usr/lib/ccache:$PATH"' >> /root/.bashrc \
-    && echo 'ccache --max-size=20G' >> /root/.bashrc
+RUN sudo bash -c 'echo "export PATH=\"/usr/lib/ccache:\$PATH\"" >> /root/.bashrc' \
+    && sudo bash -c 'echo "ccache --max-size=20G" >> /root/.bashrc'
 
-
-RUN mkdir -p ${CATKIN_WS}/src
+RUN sudo mkdir -p ${CATKIN_WS}/src
 WORKDIR ${CATKIN_WS}
 
 # Initialize catkin workspace
-RUN catkin init && \
-    catkin config --merge-devel && \
-    catkin config --extend /opt/ros/noetic && \
-    catkin config --cmake-args \
+RUN sudo catkin init && \
+    sudo catkin config --merge-devel && \
+    sudo catkin config --extend /opt/ros/noetic && \
+    sudo catkin config --cmake-args \
         -DCMAKE_BUILD_TYPE=Release
 
-RUN git config --global url."https://github.com/".insteadOf "git@github.com:"
-RUN git clone https://github.com/ethz-asl/maplab.git --recursive -b master
-RUN maplab build maplab
-
-
-WORKDIR ${CATKIN_WS}
-
+# Install tmuxp 
+RUN sudo apt update
+RUN sudo apt install tmux tmuxp -y
+RUN touch ~/.tmux.conf && \
+    echo "set -g mouse on" >> ~/.tmux.conf

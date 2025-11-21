@@ -35,7 +35,7 @@ enter_container.sh
 
 ### Maplab Install
 
-Maplab will be built after setting up docker
+Clone the respostory into the `src` folder, and then run the following command:
 ```
-
-## Run algorithm
+catkin build maplab
+```

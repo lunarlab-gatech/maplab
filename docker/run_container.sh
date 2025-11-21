@@ -2,8 +2,8 @@
 xhost +local:docker
 
 # Define directories
-DATA_DIR='/media/nisemono/T7/GT/SLAM'
-REPO_DIR='/root/maplab_ws'   # adjust this if you want to mount your source repo
+DATA_DIR='/home/dbutterfield3/Desktop/data'
+REPO_DIR='/home/dbutterfield3/Research/ros_workspaces/maplab_ws/src/maplab'
 
 docker run -it \
     --name="maplab_2" \
@@ -18,7 +18,7 @@ docker run -it \
     --env="XDG_RUNTIME_DIR=/tmp/runtime-$USER" \
     --env="USER_ID=$(id -u)" \
     --env="GROUP_ID=$(id -g)" \
-    --volume="$DATA_DIR:/data:rw" \
+    --volume="$DATA_DIR:/home/$USER/data:rw" \
     --volume="$REPO_DIR:/root/maplab_ws:rw" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --volume="/tmp/runtime-$USER:/tmp/runtime-$USER" \
