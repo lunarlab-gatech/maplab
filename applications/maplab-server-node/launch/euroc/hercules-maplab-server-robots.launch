@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+
+<launch>
+	<arg name="hercules_playback_speed" default="1.0"/>
+    <!-- FIXME: Change this directory -->
+	<arg name="hercules_bags_folder" default="/data/MH"/>
+	<arg name="hercules_root_map_directory" default="/tmp/maplab_node/"/>
+
+	<!-- ================================== Drone1 ================================================== -->
+	<group>
+		<arg name="hercules_robot_name" default="drone1"/>
+<!-- FIXME: you are here -->
+		<node pkg="rosbag" type="play" name="rosbag_$(arg hercules_robot_name)" args="$(arg hercules_bags_folder)/MH_01_easy.bag -q -d 2 -s 0 -r $(arg hercules_playback_speed)">
+			<remap from="/imu0" to="/$(arg hercules_robot_name)/imu0"/>
+			<remap from="/cam0/image_raw" to="/$(arg hercules_robot_name)/cam0/image_raw"/>
+			<remap from="/cam1/image_raw" to="/$(arg hercules_robot_name)/cam1/image_raw"/>
+		</node>
+
+		<include file="$(find maplab_server_node)/launch/hercules/hercules-maplab-node-w-rovioli.launch">
+			<arg name="robot_name" default="$(arg hercules_robot_name)"/>
+			<arg name="robot_calib_file" default="hercules-$(arg hercules_robot_name).yaml"/>
+			<arg name="root_map_directory" default="$(arg hercules_root_map_directory)"/>
+		</include>
+	</group>
+
+	<!-- ================================== Drone2 ================================================== -->
+	<group>
+		<arg name="hercules_robot_name" default="drone2"/>
+
+		<node pkg="rosbag" type="play" name="rosbag_$(arg hercules_robot_name)" args="$(arg hercules_bags_folder)/MH_02_easy.bag -q -d 2 -s 0 -r $(arg hercules_playback_speed)">
+			<remap from="/imu0" to="/$(arg hercules_robot_name)/imu0"/>
+			<remap from="/cam0/image_raw" to="/$(arg hercules_robot_name)/cam0/image_raw"/>
+			<remap from="/cam1/image_raw" to="/$(arg hercules_robot_name)/cam1/image_raw"/>
+		</node>
+
+		<include file="$(find maplab_server_node)/launch/hercules/hercules-maplab-node-w-rovioli.launch">
+			<arg name="robot_name" default="$(arg hercules_robot_name)"/>
+			<arg name="robot_calib_file" default="hercules-$(arg hercules_robot_name).yaml"/>
+			<arg name="root_map_directory" default="$(arg hercules_root_map_directory)"/>
+		</include>
+	</group>
+
+	<!-- ================================== MH_03 ================================================== -->
+	<group>
+		<arg name="hercules_robot_name" default="husky1"/>
+
+		<node pkg="rosbag" type="play" name="rosbag_$(arg hercules_robot_name)" args="$(arg hercules_bags_folder)/MH_03_medium.bag -q -d 2 -s 0 -r $(arg hercules_playback_speed)">
+			<remap from="/imu0" to="/$(arg hercules_robot_name)/imu0"/>
+			<remap from="/cam0/image_raw" to="/$(arg hercules_robot_name)/cam0/image_raw"/>
+			<remap from="/cam1/image_raw" to="/$(arg hercules_robot_name)/cam1/image_raw"/>
+		</node>
+
+		<include file="$(find maplab_server_node)/launch/hercules/hercules-maplab-node-w-rovioli.launch">
+			<arg name="robot_name" default="$(arg hercules_robot_name)"/>
+			<arg name="robot_calib_file" default="hercules-$(arg hercules_robot_name).yaml"/>
+			<arg name="root_map_directory" default="$(arg hercules_root_map_directory)"/>
+		</include>
+	</group>
+
+	<!-- ================================== MH_04 ================================================== -->
+	<group>
+		<arg name="hercules_robot_name" default="husky2"/>
+
+		<node pkg="rosbag" type="play" name="rosbag_$(arg hercules_robot_name)" args="$(arg hercules_bags_folder)/MH_04_difficult.bag -q -d 2 -s 0 -r $(arg hercules_playback_speed)">
+			<remap from="/imu0" to="/$(arg hercules_robot_name)/imu0"/>
+			<remap from="/cam0/image_raw" to="/$(arg hercules_robot_name)/cam0/image_raw"/>
+			<remap from="/cam1/image_raw" to="/$(arg hercules_robot_name)/cam1/image_raw"/>
+		</node>
+
+		<include file="$(find maplab_server_node)/launch/hercules/hercules-maplab-node-w-rovioli.launch">
+			<arg name="robot_name" default="$(arg hercules_robot_name)"/>
+			<arg name="robot_calib_file" default="hercules-$(arg hercules_robot_name).yaml"/>
+			<arg name="root_map_directory" default="$(arg hercules_root_map_directory)"/>
+		</include>
+	</group>
+</launch>
