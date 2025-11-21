@@ -3,7 +3,7 @@
 
 
 ## Step1: Preprocess Data
-- Process Hercules data with simple_extract_to_bag.py inside [robotdataprocess](https://github.com/lunarlab-gatech/robotdataprocess)
+- Process Hercules data with simple_extract_to_bag.py inside [robotdataprocess]([https://github.com/lunarlab-gatech/robotdataprocess](https://github.com/lunarlab-gatech/robotdataprocess/blob/develop/examples/Hercules/simple_extract_to_bag.py))
 
 ## Step2: Modify Files
 
