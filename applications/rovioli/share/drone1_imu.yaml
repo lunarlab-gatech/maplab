@@ -1,0 +1,4 @@
+acc_noise_density: 0.004
+acc_bias_random_walk_noise_density: 0.0004
+gyro_noise_density: 0.0002
+gyro_bias_random_walk_noise_density: 0.00002

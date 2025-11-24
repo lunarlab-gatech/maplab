@@ -1,9 +1,9 @@
 sensors:
-  - id: 5555acb41bfdfd6b7e1fac37c7cbe7bf
-    topic: /mh5/imu0
-    # topic: /imu0
+  - id: 1111acb41bfdfd6b7e1fac37c7cbe7bf
+    topic: /drone1/imu0
     description: "VI-Sensor IMU (ADIS16448)"
     sensor_type: IMU
+    # need to change these
     sigmas:
       acc_noise_density: 4e-3
       acc_bias_random_walk_noise_density: 4e-3
@@ -13,15 +13,15 @@ sensors:
     saturation_gyro_max_radps: 7.5
     gravity_magnitude_mps2: 9.81
 
-  - id: 5555bb8e4058621f7036b5e765dfe812
+  - id: 1111bb8e4058621f7036b5e765dfe812
     sensor_type: NCAMERA
     description: "VISensor - Euroc - original_calibration"
     topic: ""
     cameras:
       - camera:
-          topic: /mh5/cam0
+          topic: /drone1/cam0
           # topic: /cam0
-          id: 5555b062fa109c40fe90b29a59dd7798
+          id: 1111b062fa109c40fe90b29a59dd7798
           description: "VI-Sensor cam0 (MT9M034)"
           sensor_type: CAMERA
           line-delay-nanoseconds: 0
@@ -48,9 +48,9 @@ sensors:
                  0.0, 0.0, 0.0, 1.0]
 
       - camera:
-          topic: /mh5/cam1
+          topic: /drone1/cam1
           # topic: /cam1
-          id: 5555b162fa109c40fe90b29a59dd7723
+          id: 1111b162fa109c40fe90b29a59dd7723
           description: "VI-Sensor cam1 (MT9M034)"
           sensor_type: CAMERA
           line-delay-nanoseconds: 0
@@ -75,10 +75,10 @@ sensors:
                -0.0253898008918, 0.0179005838253, 0.999517347078, 0.00786212447038,
                 0.0, 0.0, 0.0, 1.0]
 
-  - id: 5555c3479caf7592b35518478a2fe08f
+  - id: 1111c3479caf7592b35518478a2fe08f
     sensor_type: ODOMETRY_6DOF
     description: "ROVIOLI in Odometry mode"
-    topic: /mh5/rovioli/maplab_odom_T_M_I
+    topic: /drone1/rovioli/maplab_odom_T_M_I
     T_St_Stp1_fixed_covariance:
       rows: 6
       cols: 6
@@ -91,9 +91,8 @@ sensors:
         - [0,0,0,0,0,0.0001]
 
 extrinsics:
-
-  - sensor_id: 5555bb8e4058621f7036b5e765dfe812
-    base_sensor_id: 5555acb41bfdfd6b7e1fac37c7cbe7bf
+  - sensor_id: 1111bb8e4058621f7036b5e765dfe812
+    base_sensor_id: 1111acb41bfdfd6b7e1fac37c7cbe7bf
     T_B_S:
       cols: 4
       rows: 4
@@ -103,8 +102,8 @@ extrinsics:
         - [0,0,1,0]
         - [0,0,0,1]
 
-  - sensor_id: 5555acb41bfdfd6b7e1fac37c7cbe7bf
-    base_sensor_id: 5555acb41bfdfd6b7e1fac37c7cbe7bf
+  - sensor_id: 1111acb41bfdfd6b7e1fac37c7cbe7bf
+    base_sensor_id: 1111acb41bfdfd6b7e1fac37c7cbe7bf
     T_B_S:
       rows: 4
       cols: 4
@@ -114,8 +113,8 @@ extrinsics:
         - [0,0,1,0]
         - [0,0,0,1]
 
-  - sensor_id: 5555c3479caf7592b35518478a2fe08f
-    base_sensor_id: 5555acb41bfdfd6b7e1fac37c7cbe7bf
+  - sensor_id: 1111c3479caf7592b35518478a2fe08f
+    base_sensor_id: 1111acb41bfdfd6b7e1fac37c7cbe7bf
     T_B_S:
       rows: 4
       cols: 4
