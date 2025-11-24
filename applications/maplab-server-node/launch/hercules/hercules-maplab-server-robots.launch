@@ -2,8 +2,8 @@
 
 <launch>
 	<arg name="hercules_playback_speed" default="1.0"/>
-	<arg name="hercules_bags_folder" default="/home/dbutterfield3/data/Hercules_datasets/V1.6/extract/bags_for_maplab"/>
-	<arg name="hercules_root_map_directory" default="/home/dbutterfield3/data/Hercules_datasets/V1.6/results/maplab_results/robot_maps"/>
+	<arg name="hercules_bags_folder" default="/data/test3_2uav2ugv_calib_752x480/output_bags"/>
+	<arg name="hercules_root_map_directory" default="/root/maplab_ws/Hercules/map"/>
 
 	<!-- ================================== Drone1 ================================================== -->
 	<group>
