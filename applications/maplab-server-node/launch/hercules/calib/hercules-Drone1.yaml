@@ -19,7 +19,7 @@ sensors:
     topic: ""
     cameras:
       - camera:
-          topic: /drone1/cam0
+          topic: /Drone1/cam0
           # topic: /cam0
           id: 1111b062fa109c40fe90b29a59dd7798
           description: "VI-Sensor cam0 (MT9M034)"
@@ -48,7 +48,7 @@ sensors:
                  0.0, 0.0, 0.0, 1.0]
 
       - camera:
-          topic: /drone1/cam1
+          topic: /Drone1/cam1
           # topic: /cam1
           id: 1111b162fa109c40fe90b29a59dd7723
           description: "VI-Sensor cam1 (MT9M034)"
@@ -78,7 +78,7 @@ sensors:
   - id: 1111c3479caf7592b35518478a2fe08f
     sensor_type: ODOMETRY_6DOF
     description: "ROVIOLI in Odometry mode"
-    topic: /drone1/rovioli/maplab_odom_T_M_I
+    topic: /Drone1/rovioli/maplab_odom_T_M_I
     T_St_Stp1_fixed_covariance:
       rows: 6
       cols: 6

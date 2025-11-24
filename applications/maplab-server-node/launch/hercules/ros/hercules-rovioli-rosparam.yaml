@@ -24,11 +24,11 @@ rovio_image_mask_path:                            ""
 rovioli_image_apply_clahe_histogram_equalization: false
 
 # ROVIO
-rovio_enable_frame_visualization: false
+rovio_enable_frame_visualization: true
 rovioli_enable_health_checking:   false
 
 # MAP BUILDING
-rovioli_run_map_builder:             false
+rovioli_run_map_builder:             true
 save_map_folder:                     ""
 overwrite_existing_map:              false
 optimize_map_to_localization_map:    false
