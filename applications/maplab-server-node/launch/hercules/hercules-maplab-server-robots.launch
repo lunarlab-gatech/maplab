@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 
 <launch>
-	<arg name="hercules_playback_speed" default="1.0"/>
-	<arg name="hercules_bags_folder" default="/data/test3_2uav2ugv_calib_752x480/output_bags"/>
-	<arg name="hercules_root_map_directory" default="/root/maplab_ws/Hercules/map"/>
+	<arg name="user_name" default="$(env USER)" />
+	<arg name="dataset_number" default="V1.6"/>
 
+	<arg name="hercules_playback_speed" default="1.0"/>
+	<arg name="hercules_bags_folder" default="/home/$(arg user_name)/data/Hercules_datasets/$(arg dataset_number)/extract/bags_for_maplab"/>
+	<arg name="hercules_root_map_directory" default="/home/$(arg user_name)/data/Hercules_datasets/$(arg dataset_number)/results/maplab_results/robot_maps"/>
 	<!-- ================================== Drone1 ================================================== -->
 	<group>
 		<arg name="hercules_robot_name" default="Drone1"/>

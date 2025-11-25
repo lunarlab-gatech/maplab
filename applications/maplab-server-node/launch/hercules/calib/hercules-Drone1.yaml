@@ -3,12 +3,11 @@ sensors:
     topic: /Drone1/imu0
     description: "VI-Sensor IMU (ADIS16448)"
     sensor_type: IMU
-    # need to change these
     sigmas:
-      acc_noise_density: 4e-3
-      acc_bias_random_walk_noise_density: 4e-3
-      gyro_noise_density: 1e-4
-      gyro_bias_random_walk_noise_density: 1e-4
+      acc_noise_density: 0.8
+      acc_bias_random_walk_noise_density: 2e-5
+      gyro_noise_density: 4e-3
+      gyro_bias_random_walk_noise_density: 2e-6
     saturation_accel_max_mps2: 150.0
     saturation_gyro_max_radps: 7.5
     gravity_magnitude_mps2: 9.81
@@ -20,7 +19,6 @@ sensors:
     cameras:
       - camera:
           topic: /Drone1/cam0
-          # topic: /cam0
           id: 1111b062fa109c40fe90b29a59dd7798
           description: "VI-Sensor cam0 (MT9M034)"
           sensor_type: CAMERA
@@ -41,38 +39,10 @@ sensors:
         T_B_C:
           cols: 4
           rows: 4
-          data: [ -0.0, -1.0, -0.0, 0.0,
-                0.17364817766693036, -0.0, -0.9848077530122082, -0.15925763748464644,
-                0.9848077530122081, 0.0, 0.17364817766693036, -0.3273178957875798,
-                0.0, 0.0, 0.0, 1.0]
-
-      - camera:
-          topic: /Drone1/cam1
-          # topic: /cam1
-          id: 1111b162fa109c40fe90b29a59dd7723
-          description: "VI-Sensor cam1 (MT9M034)"
-          sensor_type: CAMERA
-          line-delay-nanoseconds: 0
-          image_height: 480
-          image_width: 752
-          type: pinhole
-          intrinsics:
-            cols: 1
-            rows: 4
-            data: [457.5874266035361, 456.13442556023665, 379.9994465203525, 255.2381853862733]
-          distortion:
-            type: radial-tangential
-            parameters:
-              cols: 1
-              rows: 4
-              data: [-0.283683654496, 0.0745128430929, -0.000104738949098, -3.55590700274e-05]
-        T_B_C:
-          cols: 4
-          rows: 4
-          data: [0.0125552670891, -0.999755099723, 0.0182237714554, -0.0198435579556,
-                0.999598781151, 0.0130119051815, 0.0251588363115, 0.0453689425024,
-               -0.0253898008918, 0.0179005838253, 0.999517347078, 0.00786212447038,
-                0.0, 0.0, 0.0, 1.0]
+          data: [ 0.    ,      0.17364818,  0.98480775,  0.35   ,   
+                  1.0,          0.,          0.  ,        0.,        
+                  0.,          0.98480775, -0.17364818,  0.1,
+                  0.,          0.,          0.,          1.        ]
 
   - id: 1111c3479caf7592b35518478a2fe08f
     sensor_type: ODOMETRY_6DOF
