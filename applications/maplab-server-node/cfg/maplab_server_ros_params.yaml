@@ -8,7 +8,7 @@ num_hardware_threads:                                                 10
 # INPUT / OUTPUT
 ############################
 maplab_server_backup_interval_s:                                      300
-maplab_server_merged_map_folder:                                      /home/dbutterfield3/data/EuRoC/merged_map
+maplab_server_merged_map_folder:                                      /home/nisemono/maplab_ws/Hercules/merged_map
 overwrite:                                                            true
 maplab_server_map_update_topic:                                       map_update_notification
 

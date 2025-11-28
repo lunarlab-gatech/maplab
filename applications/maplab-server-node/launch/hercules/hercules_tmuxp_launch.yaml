@@ -9,7 +9,7 @@ windows:
   focus: true
   shell_command_before:
   - source /opt/ros/noetic/setup.bash
-  - source /root/maplab_ws/devel/setup.bash
+  - source /home/nisemono/maplab_ws/devel/setup.bash
   panes:
   - shell_command:
     - roslaunch maplab_server_node hercules-maplab-server-base-station.launch
