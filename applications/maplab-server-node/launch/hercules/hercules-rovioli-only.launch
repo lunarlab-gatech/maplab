@@ -18,17 +18,5 @@
 				<param name="export_estimated_poses_to_csv" value="$(arg root_map_directory)/rovioli/$(arg robot_name)/estimated_poses.csv"/>
 			</node>
 		</group>
-
-		<!-- MAPLAB -->
-		<!-- <node name="maplab_node" pkg="maplab_node" type="maplab_node" output="screen" clear_params="true">
-			 LOAD GENERAL PARAMS 
-			<rosparam command="load" file="$(find maplab_server_node)/launch/hercules/ros/hercules-maplab-node-rosparam.yaml"/>
-
-			 ROBOT SPECIFIC PARAMS
-			<param name="sensor_calibration_file" value="$(find maplab_server_node)/launch/hercules/calib/$(arg robot_calib_file)"/>
-
-			<param name="robot_name" value="$(arg robot_name)"/>
-			<param name="map_output_folder" value="$(arg root_map_directory)/$(arg robot_name)"/>
-		</node> -->
 	</group>
 </launch>

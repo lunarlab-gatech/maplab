@@ -16,12 +16,12 @@ windows:
   - shell_command:
     - sleep 2
     - rosrun maplab_console maplab_console 
-    - load --map_folder /home/dbutterfield3/data/EuRoC/merged_map
+    - load --map_folder /home/dbutterfield3/data/Hercules_datasets/V1.5/results/maplab_results/merged_map
     - v
     - export_trajectory_to_csv
   - shell_command:
     - sleep 4
-    - rviz -d /home/${USER}/maplab_ws/src/maplab/applications/maplab-server-node/launch/euroc/ros/euroc_vis_map.rviz
+    - rviz -d /home/${USER}/maplab_ws/src/maplab/applications/maplab-server-node/launch/euroc/ros/euroc-maplab-vis.rviz
   -
 
 - window_name: kill

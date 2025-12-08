@@ -22,5 +22,9 @@ windows:
 
 - window_name: kill
   layout: tiled
+  shell_command_before:
+  - source /opt/ros/noetic/setup.bash
+  - source /home/${USER}/maplab_ws/devel/setup.bash
   panes:
+  - 
   - echo "tmux kill-session -t maplab_server_euroc"

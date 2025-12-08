@@ -1,26 +1,26 @@
 sensors:
   - id: 1111acb41bfdfd6b7e1fac37c7cbe7bf
     topic: /Drone1/imu0
-    description: "VI-Sensor IMU (ADIS16448)"
+    description: "Synthetic IMU Sensor for HERCULES simulator"
     sensor_type: IMU
     sigmas:
-      acc_noise_density: 0.8
-      acc_bias_random_walk_noise_density: 2e-5
+      acc_noise_density: 0.08
+      acc_bias_random_walk_noise_density: 4e-5
       gyro_noise_density: 4e-3
       gyro_bias_random_walk_noise_density: 2e-6
     saturation_accel_max_mps2: 150.0
     saturation_gyro_max_radps: 7.5
-    gravity_magnitude_mps2: 9.81
+    gravity_magnitude_mps2: 9.81007
 
   - id: 1111bb8e4058621f7036b5e765dfe812
     sensor_type: NCAMERA
-    description: "VISensor - Euroc - original_calibration"
+    description: "Simulated HERCULES Camera"
     topic: ""
     cameras:
       - camera:
           topic: /Drone1/cam0
           id: 1111b062fa109c40fe90b29a59dd7798
-          description: "VI-Sensor cam0 (MT9M034)"
+          description: "cam0"
           sensor_type: CAMERA
           line-delay-nanoseconds: 0
           image_height: 480

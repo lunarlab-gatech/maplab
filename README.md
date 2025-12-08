@@ -64,3 +64,17 @@ applications/maplab-server-node/launch/euroc/euroc_vis_map.yaml
 ```
 
 The maplab-console will specify where the output trajectories were saved.
+
+### Hercules Dataset
+
+First, make changes to the following variables (to update data and user directory names):
+```
+hercules_bags_folder (applications/maplab-server-node/launch/hercules/hercules-maplab-server-robots.launch)
+hercules_root_map_directory (applications/maplab-server-node/launch/hercules/hercules-maplab-server-robots.launch)
+shell_command_before (applications/maplab-server-node/launch/hercules/hercules_tmuxp_launch.yaml)
+```
+
+Then run the following command to run maplab:
+```
+tmuxp load src/maplab/applications/maplab-server-node/launch/hercules/hercules_tmuxp_launch.yaml
+```

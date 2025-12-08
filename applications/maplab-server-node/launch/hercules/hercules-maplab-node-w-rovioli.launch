@@ -14,6 +14,8 @@
 
 				<!-- ROBOT SPECIFIC PARAMS -->
 				<param name="sensor_calibration_file" value="$(find maplab_server_node)/launch/hercules/calib/$(arg robot_calib_file)"/>
+				<param name="save_map_folder" value="$(arg root_map_directory)/rovioli/$(arg robot_name)"/>
+				<param name="export_estimated_poses_to_csv" value="$(arg root_map_directory)/rovioli/$(arg robot_name)/estimated_poses.csv"/>
 			</node>
 		</group>
 
@@ -26,7 +28,7 @@
 			<param name="sensor_calibration_file" value="$(find maplab_server_node)/launch/hercules/calib/$(arg robot_calib_file)"/>
 
 			<param name="robot_name" value="$(arg robot_name)"/>
-			<param name="map_output_folder" value="$(arg root_map_directory)/$(arg robot_name)"/>
+			<param name="map_output_folder" value="$(arg root_map_directory)/maplab/$(arg robot_name)"/>
 		</node>
 	</group>
 </launch>
