@@ -16,7 +16,8 @@ sensors:
   - id: 3333c3479caf7592b35518478a2fe08f
     sensor_type: ODOMETRY_6DOF
     description: "ROVIOLI in Odometry mode"
-    topic: /Husky1/rovioli/maplab_odom_T_M_I
+    # topic: /Husky1/rovioli/maplab_odom_T_M_I
+    topic: /Husky1/rovioli/T_M_I
     T_St_Stp1_fixed_covariance:
       rows: 6
       cols: 6
