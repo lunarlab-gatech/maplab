@@ -1,0 +1,13 @@
+digraph G {
+"mission" -> "imu"[label="Broadcaster: /Husky1/rovioli/rovioli\nAverage rate: 20.202 Hz\nMost recent transform: 94.550 ( 1767681360.575 sec old)\nBuffer length: 4.950 sec\n"];
+"map" -> "mission"[label="Broadcaster: /Husky1/rovioli/rovioli\nAverage rate: 20.202 Hz\nMost recent transform: 94.550 ( 1767681360.575 sec old)\nBuffer length: 4.950 sec\n"];
+"mission" -> "imu_0_BASE"[label="Broadcaster: /Husky1/maplab_node\nAverage rate: 20.202 Hz\nMost recent transform: 94.550 ( 1767681360.575 sec old)\nBuffer length: 4.950 sec\n"];
+"imu_0_BASE" -> "ncamera_0"[label="Broadcaster: /Husky1/maplab_node\nAverage rate: 20.202 Hz\nMost recent transform: 94.550 ( 1767681360.575 sec old)\nBuffer length: 4.950 sec\n"];
+"ncamera_0" -> "camera_0.0"[label="Broadcaster: /Husky1/maplab_node\nAverage rate: 20.202 Hz\nMost recent transform: 94.550 ( 1767681360.575 sec old)\nBuffer length: 4.950 sec\n"];
+"imu_0_BASE" -> "odometry_6dof_sensor_0"[label="Broadcaster: /Husky1/maplab_node\nAverage rate: 20.202 Hz\nMost recent transform: 94.550 ( 1767681360.575 sec old)\nBuffer length: 4.950 sec\n"];
+"imu_0_BASE" -> "lidar_sensor_0"[label="Broadcaster: /Husky1/maplab_node\nAverage rate: 20.202 Hz\nMost recent transform: 94.550 ( 1767681360.575 sec old)\nBuffer length: 4.950 sec\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1767681455.125"[ shape=plaintext ] ;
+ }->"map";
+}

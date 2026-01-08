@@ -5,6 +5,7 @@ vio_camera_topic_suffix:                 "/image_raw"
 vio_nframe_sync_tolerance_ns:            500000
 vio_nframe_sync_max_output_frequency_hz: 10
 
+
 # SENSOR SELECTION
 # only needed if there are multiple ncameras/lidars/imus/odometries
 # in the calibration file.
@@ -36,7 +37,7 @@ map_split_map_into_submaps_when_saving_periodically: true
 
 # ATTACHING RESOURCES TO MAP
 map_builder_save_image_as_resources:                                    false
-map_builder_save_point_clouds_as_resources:                             false
+map_builder_save_point_clouds_as_resources:                             true
 map_builder_save_point_clouds_as_range_image_camera_id:                 ""
 map_builder_save_point_clouds_as_range_image_including_intensity_image: false
 map_builder_save_point_cloud_maps_as_resources:                         false

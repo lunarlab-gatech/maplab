@@ -12,37 +12,6 @@ sensors:
     saturation_gyro_max_radps: 7.5
     gravity_magnitude_mps2: 9.81
 
-  - id: 3333bb8e4058621f7036b5e765dfe812
-    sensor_type: NCAMERA
-    description: "Simulated HERCULES Camera"
-    topic: ""
-    cameras:
-      - camera:
-          topic: /Husky1/cam0
-          id: 3333b062fa109c40fe90b29a59dd7798
-          description: "cam0"
-          sensor_type: CAMERA
-          line-delay-nanoseconds: 0
-          image_height: 480
-          image_width: 752
-          type: pinhole
-          intrinsics:
-            cols: 1
-            rows: 4
-            data: [376, 376, 376, 240]
-          distortion:
-            type: radial-tangential
-            parameters:
-              cols: 1
-              rows: 4
-              data: [0.0, 0.0, 0.0, 0.0]
-        T_B_C:
-          cols: 4
-          rows: 4
-          data: [0., 0., 1., 0,
-                 1., 0., 0., 0.,
-                 0., 1., 0., -0.35,
-                 0., 0., 0., 1.]
 
   - id: 3333c3479caf7592b35518478a2fe08f
     sensor_type: ODOMETRY_6DOF
@@ -68,17 +37,6 @@ sensors:
 
 extrinsics:
 
-  - sensor_id: 3333bb8e4058621f7036b5e765dfe812
-    base_sensor_id: 3333acb41bfdfd6b7e1fac37c7cbe7bf
-    T_B_S:
-      cols: 4
-      rows: 4
-      data:
-        - [1,0,0,0]
-        - [0,1,0,0]
-        - [0,0,1,0]
-        - [0,0,0,1]
-
   - sensor_id: 3333acb41bfdfd6b7e1fac37c7cbe7bf
     base_sensor_id: 3333acb41bfdfd6b7e1fac37c7cbe7bf
     T_B_S:
@@ -100,6 +58,7 @@ extrinsics:
         - [0,1,0,0]
         - [0,0,1,0]
         - [0,0,0,1]
+
   - sensor_id: 11112222333344445555666677778888
     base_sensor_id: 3333acb41bfdfd6b7e1fac37c7cbe7bf
     T_B_S:

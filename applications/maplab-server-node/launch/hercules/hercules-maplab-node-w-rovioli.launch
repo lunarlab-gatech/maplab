@@ -25,7 +25,7 @@
 			<rosparam command="load" file="$(find maplab_server_node)/launch/hercules/ros/hercules-maplab-node-rosparam.yaml"/>
 
 			<!-- ROBOT SPECIFIC PARAMS -->
-			<param name="sensor_calibration_file" value="$(find maplab_server_node)/launch/hercules/calib/$(arg robot_calib_file)"/>
+			<param name="sensor_calibration_file" value="$(find maplab_server_node)/launch/hercules/calib/hercules-Husky1-maplab.yaml"/>
 
 			<param name="robot_name" value="$(arg robot_name)"/>
 			<param name="map_output_folder" value="$(arg root_map_directory)/maplab/$(arg robot_name)"/>

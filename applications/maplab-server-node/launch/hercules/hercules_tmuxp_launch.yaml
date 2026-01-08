@@ -9,16 +9,15 @@ windows:
   focus: true
   shell_command_before:
   - source /opt/ros/noetic/setup.bash
-  - source /home/dbutterfield3/maplab_ws/devel/setup.bash
+  - source /home/nisemono/maplab_ws/devel/setup.bash
   panes:
   - shell_command:
-    - roslaunch maplab_server_node hercules-maplab-server-base-station.launch
-  - shell_command:
-    - sleep 2
     - roslaunch maplab_server_node hercules-maplab-server-robots.launch
   - shell_command:
+    - sleep 2
+    - roslaunch maplab_server_node hercules-maplab-server-base-station.launch
+  - shell_command:
     - rviz -d /home/${USER}/maplab_ws/src/maplab/applications/maplab-server-node/launch/hercules/ros/hercules-maplab-server-minimal.rviz
-  -
 
 - window_name: kill
   layout: tiled

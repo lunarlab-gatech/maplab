@@ -2,7 +2,9 @@
 
 <launch>
 	<arg name="root_map_directory" default=""/>
-
+	<arg name="user_name" default="$(env USER)" />
+	<arg name="dataset_number" default="V2.1.0"/>
+	<arg name="hercules_root_map_directory" default="/home/$(arg user_name)/data/Hercules_datasets/$(arg dataset_number)/results/maplab_results"/>
 	<!-- MAPLAB SERVER -->
 	<group ns="maplab_server">
 		<node name="maplab_server_node" pkg="maplab_server_node" type="maplab_server_node" output="screen" clear_params="true">

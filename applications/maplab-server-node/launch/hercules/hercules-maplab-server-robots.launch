@@ -2,13 +2,13 @@
 
 <launch>
 	<arg name="user_name" default="$(env USER)" />
-	<arg name="dataset_number" default="V1.5"/>
+	<arg name="dataset_number" default="V2.1.0"/>
 
 	<arg name="hercules_playback_speed" default="1.0"/>
 	<arg name="hercules_bags_folder" default="/home/$(arg user_name)/data/Hercules_datasets/$(arg dataset_number)/extract/bags_for_maplab"/>
 	<arg name="hercules_root_map_directory" default="/home/$(arg user_name)/data/Hercules_datasets/$(arg dataset_number)/results/maplab_results"/>
 	<!-- ================================== Drone1 ================================================== -->
-	<group>
+	<!-- <group>
 		<arg name="hercules_robot_name" default="Drone1"/>
 		<node pkg="rosbag" type="play" name="rosbag_$(arg hercules_robot_name)" args="$(arg hercules_bags_folder)/$(arg hercules_robot_name).bag -q -d 2 -s 0 -r $(arg hercules_playback_speed)">
 			<remap from="/imu0" to="/$(arg hercules_robot_name)/imu0"/>
@@ -20,10 +20,10 @@
 			<arg name="robot_calib_file" default="hercules-$(arg hercules_robot_name).yaml"/>
 			<arg name="root_map_directory" default="$(arg hercules_root_map_directory)"/>
 		</include>
-	</group>
+	</group> -->
 
 	<!-- Drone2 -->
-	<group>
+	<!-- <group>
 		<arg name="hercules_robot_name" default="Drone2"/>
 		<node pkg="rosbag" type="play" name="rosbag_$(arg hercules_robot_name)" args="$(arg hercules_bags_folder)/$(arg hercules_robot_name).bag -q -d 2 -s 0 -r $(arg hercules_playback_speed)">
 			<remap from="/imu0" to="/$(arg hercules_robot_name)/imu0"/>
@@ -35,7 +35,7 @@
 			<arg name="robot_calib_file" default="hercules-$(arg hercules_robot_name).yaml"/>
 			<arg name="root_map_directory" default="$(arg hercules_root_map_directory)"/>
 		</include>
-	</group>
+	</group> -->
 	
 	<!-- Husky1 -->
 	<group>
@@ -43,6 +43,7 @@
 		<node pkg="rosbag" type="play" name="rosbag_$(arg hercules_robot_name)" args="$(arg hercules_bags_folder)/$(arg hercules_robot_name).bag -q -d 2 -s 0 -r $(arg hercules_playback_speed)">
 			<remap from="/imu0" to="/$(arg hercules_robot_name)/imu0"/>
 			<remap from="/cam0/image_raw" to="/$(arg hercules_robot_name)/cam0/image_raw"/>
+			<remap from ="/lidar" to="/$(arg hercules_robot_name)/lidar"/>
 		</node>
 
 		<include file="$(find maplab_server_node)/launch/hercules/hercules-maplab-node-w-rovioli.launch">
@@ -53,7 +54,7 @@
 	</group>
 
 	<!-- Husky2 -->
-	<group>
+	<!-- <group>
 		<arg name="hercules_robot_name" default="Husky2"/>
 		<node pkg="rosbag" type="play" name="rosbag_$(arg hercules_robot_name)" args="$(arg hercules_bags_folder)/$(arg hercules_robot_name).bag -q -d 2 -s 0 -r $(arg hercules_playback_speed)">
 			<remap from="/imu0" to="/$(arg hercules_robot_name)/imu0"/>
@@ -65,6 +66,6 @@
 			<arg name="robot_calib_file" default="hercules-$(arg hercules_robot_name).yaml"/>
 			<arg name="root_map_directory" default="$(arg hercules_root_map_directory)"/>
 		</include>
-	</group> 
+	</group>  -->
 
 </launch>
