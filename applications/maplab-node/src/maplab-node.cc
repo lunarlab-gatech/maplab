@@ -35,7 +35,7 @@ namespace maplab {
 MaplabNode::MaplabNode(
     const std::string& sensor_calibration_file,
     const std::string& save_map_folder, message_flow::MessageFlow* const flow)
-    : message_flow_(CHECK_NOTNULL(flow)),
+    : message_flow_(CHECK_NOTNULL(flow)), // initializing message_flow_ (ROS message routing system)
       is_datasource_exhausted_(false),
       is_running_(false),
       sensor_manager_(new vi_map::SensorManager()) {

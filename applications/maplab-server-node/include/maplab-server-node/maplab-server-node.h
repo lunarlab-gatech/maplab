@@ -167,6 +167,9 @@ class MaplabServerNode final {
   // submap thread and summarizes it.
   std::thread status_thread_;
 
+  // Exporting Map
+  void exportLoopClosures();
+
   // Map management
   /////////////////
   const std::string kMergedMapKey = "merged_map";
