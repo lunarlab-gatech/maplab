@@ -1,11 +1,10 @@
-#include <glog/logging.h>
 #include "maplab-server-node/maplab-server-node.h"
 
 #include <depth-integration/depth-integration.h>
 
 #include <aslam/common/timer.h>
 #include <gflags/gflags.h>
-
+#include <glog/logging.h>
 #include <landmark-triangulation/pose-interpolator.h>
 #include <map-anchoring/map-anchoring.h>
 #include <map-optimization/outlier-rejection-solver.h>
@@ -25,18 +24,6 @@
 #include <atomic>
 #include <memory>
 #include <string>
-
-// --- ADD THESE INCLUDES FOR LOOP CLOSURE EXPORT ---
-#include <fstream>  // For saving the JSON file
-#include <set>      // For std::set
-#include "json.hpp" // nlohmann::json header (maplab internal path)
-// Include headers needed for export logic
-#include <vi-map/edge.h>
-#include <vi-map/vertex.h>
-#include <vi-map/mission.h>
-#include <vi-map/sensor-manager.h>
-#include <loop-closure-handler/loop-detector-node.h>
-// --------------------------
 
 DECLARE_bool(ros_free);
 DECLARE_uint64(elq_min_observers);
@@ -128,32 +115,7 @@ DEFINE_bool(
     "Spatially distribute missions from robots that have not yet been merged "
     "into the main map. See flags \"spatially_*\" for more options.");
 
-// --- ADD using json ALIAS ---
-// for convenience
-using json = nlohmann::json;
-// ----------------------------
-
 namespace maplab {
-
-// Helper function to extract robot name from topic like "/mh1/cam0" -> "mh1"
-std::string extractRobotNameFromTopic(const std::string& topic) {
-  if (topic.empty() || topic[0] != '/') {
-    return "";
-  }
-  
-  // Find the second slash
-  size_t next_slash = topic.find('/', 1);
-  if (next_slash != std::string::npos && next_slash > 1) {
-    // Extract between first and second slash: "/mh1/cam0" -> "mh1"
-    return topic.substr(1, next_slash - 1);
-  } else if (next_slash == std::string::npos && topic.length() > 1) {
-    // Single-level topic "/mh1" -> "mh1"
-    return topic.substr(1);
-  }
-  
-  return "";
-}
-
 MaplabServerNode::MaplabServerNode()
     : submap_loading_thread_pool_(
           FLAGS_maplab_server_submap_loading_thread_pool_size),
@@ -786,181 +748,7 @@ void MaplabServerNode::runOneIterationOfMapMergingAlgorithms() {
         loop_detector.detectLoopClosuresAndMergeLandmarks(*jt, map.get());
       }
     }
-
-    // --- EXPORT LOOP CLOSURES TO JSON ---
-    {
-      std::lock_guard<std::mutex> merge_status_lock(
-          running_merging_process_mutex_);
-      running_merging_process_ = "exporting loop closures";
-    }
-
-    LOG(INFO) << "[LoopClosureExporter] Starting loop closure export process...";
-    
-    // Step 1: Temporarily add loop closure edges
-    loop_detector_node::LoopDetectorNode loop_detector_for_export;
-    
-    for (const vi_map::MissionId& mission_id : mission_ids) {
-      loop_detector_for_export.addMissionToDatabase(mission_id, *map);
-    }
-    
-    for (const vi_map::MissionId& mission_id : mission_ids) {
-      const bool kMergeLandmarks = false;
-      const bool kAddLoopclosureEdges = true;
-      
-      pose::Transformation T_G_M2;
-      vi_map::LoopClosureConstraintVector inlier_constraints;
-      loop_detector_for_export.detectLoopClosuresMissionToDatabase(
-          mission_id, kMergeLandmarks, kAddLoopclosureEdges, map.get(), &T_G_M2,
-          &inlier_constraints);
-    }
-    
-    // Step 2: Export loop closure edges to JSON
-    pose_graph::EdgeIdList all_edge_ids;
-    map->getAllEdgeIds(&all_edge_ids);
-    json all_closures = json::array();
-    size_t exported_count = 0;
-    bool export_failed = false;
-
-    LOG(INFO) << "[LoopClosureExporter] Checking " << all_edge_ids.size()
-              << " total edges for loop closures to export...";
-
-    for (const pose_graph::EdgeId& edge_id : all_edge_ids) {
-      if (!map->hasEdge(edge_id)) continue;
-      const vi_map::Edge& edge_base = map->getEdgeAs<vi_map::Edge>(edge_id);
-
-      if (edge_base.getType() == vi_map::Edge::EdgeType::kLoopClosure) {
-        try {
-          const vi_map::LoopClosureEdge& lc_edge =
-              map->getEdgeAs<vi_map::LoopClosureEdge>(edge_id);
-          
-          if (!map->hasVertex(lc_edge.from()) || !map->hasVertex(lc_edge.to())) {
-            LOG(WARNING) << "[LoopClosureExporter] Loop closure edge " << edge_id
-                        << " points to non-existent vertex. Skipping.";
-            continue;
-          }
-
-          // Get vertices and their poses
-          const vi_map::Vertex& vertex_from = map->getVertex(lc_edge.from());
-          const vi_map::Vertex& vertex_to = map->getVertex(lc_edge.to());
-
-          const aslam::Transformation& T_M_Ifrom = vertex_from.get_T_M_I();
-          const aslam::Transformation& T_M_Ito = vertex_to.get_T_M_I();
-
-          // Compute actual relative transformation between optimized vertices
-          const aslam::Transformation T_from_to = T_M_Ifrom.inverse() * T_M_Ito;
-
-          
-          // Get loop closure edge constraint for comparison
-          const aslam::Transformation& T_A_B_edge = lc_edge.get_T_A_B();
-
-          // Log diagnostic info
-          LOG(INFO) << "[LoopClosureExporter] Vertex poses vs Edge:";
-          LOG(INFO) << "  Actual T_from_to:    " << T_from_to.getPosition().transpose();
-          LOG(INFO) << "  Edge T_A_B:          " << T_A_B_edge.getPosition().transpose();
-          LOG(INFO) << "  Difference:          " 
-                    << (T_from_to.getPosition() - T_A_B_edge.getPosition()).norm() << " m";
-          
-
-          const vi_map::MissionId& mission_id_from = vertex_from.getMissionId();
-          const vi_map::MissionId& mission_id_to = vertex_to.getMissionId();
-
-          json lc_data;
-          lc_data["mission_ids"] = {mission_id_from.hexString(), mission_id_to.hexString()};
-
-          int64_t ts_from_ns = vertex_from.getMinTimestampNanoseconds();
-          int64_t ts_to_ns = vertex_to.getMinTimestampNanoseconds();
-          int64_t sec_from = ts_from_ns / 1000000000LL;
-          int64_t ns_from = ts_from_ns % 1000000000LL;
-          int64_t sec_to = ts_to_ns / 1000000000LL;
-          int64_t ns_to = ts_to_ns % 1000000000LL;
-
-          // const aslam::Transformation& T_A_B = lc_edge.get_T_A_B();
-          // const Eigen::Vector3d& translation = T_A_B.getPosition();
-          // const aslam::Quaternion& rotation_quat = T_A_B.getRotation();
-
-          // =================================================================
-          // DELETED DUPLICATE BLOCK THAT WAS HERE (lines 891-898)
-          // =================================================================
-
-          const Eigen::Vector3d& translation = T_from_to.getPosition();
-          const aslam::Quaternion& rotation_quat = T_from_to.getRotation();
-
-          lc_data["seconds"] = {sec_from, sec_to};
-          lc_data["nanoseconds"] = {ns_from, ns_to};
-          lc_data["translation"] = {translation.x(), translation.y(), translation.z()};
-          lc_data["rotation"] =
-              {rotation_quat.x(), rotation_quat.y(), rotation_quat.z(), rotation_quat.w()};
-          lc_data["rotation_convention"] = "xyzw";
-
-          all_closures.push_back(lc_data);
-          exported_count++;
-        } catch (const std::exception& e) {
-          LOG(ERROR) << "[LoopClosureExporter] Exception while exporting edge " << edge_id
-                     << ": " << e.what();
-          export_failed = true;
-        }
-      }
-    }
-
-    // Step 3: Save loop closures JSON
-    if (exported_count > 0 || !export_failed) {
-      std::string output_filename = FLAGS_maplab_server_merged_map_folder + "/loop_closures.json";
-      if (FLAGS_maplab_server_merged_map_folder.empty()) {
-        output_filename = "/tmp/maplab_server/loop_closures.json";
-      }
-      
-      try {
-        std::ofstream output_file(output_filename);
-        output_file << all_closures.dump(4);
-        output_file.close();
-        LOG(INFO) << "[LoopClosureExporter] Exported " << exported_count
-                  << " loop closures to " << output_filename;
-      } catch (const std::exception& e) {
-        LOG(ERROR) << "[LoopClosureExporter] Failed to save JSON: " << e.what();
-        export_failed = true;
-      }
-    }
-    
-
-    // Step 5: Remove temporary loop closure edges
-    const size_t number_of_loop_closure_edges_removed = map->removeLoopClosureEdges();
-    LOG(INFO) << "[LoopClosureExporter] Removed " << number_of_loop_closure_edges_removed
-              << " temporary loop closure edges after export.";
-    // --- END OF LOOP CLOSURE EXPORT CODE ---
   }
-  // --- EXPORT MISSION MAPPING (Must be outside map write access) ---
-  {
-    std::lock_guard<std::mutex> merge_status_lock(
-        running_merging_process_mutex_);
-    running_merging_process_ = "exporting mission mapping";
-  }
-  
-  std::string mapping_filename = FLAGS_maplab_server_merged_map_folder + "/mission_to_robot_mapping.json";
-  if (FLAGS_maplab_server_merged_map_folder.empty()) {
-    mapping_filename = "/tmp/maplab_server/mission_to_robot_mapping.json";
-  }
-  
-  try {
-    json mission_mapping = json::object();
-    
-    std::lock_guard<std::mutex> lock(robot_to_mission_id_map_mutex_);
-    for (const auto& kv : mission_id_to_robot_map_) {
-      const std::string mission_id_hex = kv.first.hexString();
-      const std::string& robot_name = kv.second;
-      mission_mapping[mission_id_hex] = robot_name;
-      
-      LOG(INFO) << "[LoopClosureExporter] Mission mapping: " 
-                << mission_id_hex << " -> " << robot_name;
-    }
-    
-    std::ofstream mapping_file(mapping_filename);
-    mapping_file << mission_mapping.dump(4);
-    mapping_file.close();
-    LOG(INFO) << "[LoopClosureExporter] Exported mission mapping to " << mapping_filename;
-  } catch (const std::exception& e) {
-    LOG(ERROR) << "[LoopClosureExporter] Failed to save mission mapping: " << e.what();
-  }
-  // --- END OF MISSION MAPPING EXPORT ---
 
   // Full optimization
   ////////////////////
