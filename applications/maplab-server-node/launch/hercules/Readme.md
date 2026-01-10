@@ -13,4 +13,10 @@ Files to modify:
 
 ## Step3: Run the experiment
 
-[Maplab Server — EuRoC Experiment Tutorial](https://maplab.asl.ethz.ch/docs/master/pages/tutorials-maplab-server/B_Euroc_Experiment.html)
+tmuxp load hercules_tmuxp_launch.yaml
+
+## Optional: Enabling or Disabling Lidar features
+- Enabling:   
+    - Set maplab_server_enable_lidar_loop_closure: true
+    - Set map_builder_save_point_clouds_as_resources: true
+- Disabling (reverse changes)

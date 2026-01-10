@@ -9,9 +9,9 @@
 	<group ns="maplab_server">
 		<node name="maplab_server_node" pkg="maplab_server_node" type="maplab_server_node" output="screen" clear_params="true">
             <!--This file contains the hyperparameters for maplab-->
-			<rosparam command="load" file="$(find maplab_server_node)/cfg/hercules/maplab_server_ros_params.yaml"/>
+			<rosparam command="load" file="$(find maplab_server_node)/launch/hercules/ros/maplab_server_ros_params.yaml"/>
 
-			<param name="maplab_server_merged_map_folder" value="$(arg hercules_root_map_directory)/maplab/merged_map"/>
+			<!-- <param name="maplab_server_merged_map_folder" value="$(arg hercules_root_map_directory)/maplab/merged_map"/> -->
 			<param name="maplab_server_map_update_topic" value="/Drone1/update,/Drone2/update,/Husky1/update,/Husky2/update"/>
 		</node>
 	</group>
