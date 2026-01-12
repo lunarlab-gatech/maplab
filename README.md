@@ -14,12 +14,7 @@ Then, clone this repository into a `src` folder in a ros workspace on your compu
 git clone git@github.com:lunarlab-gatech/maplab.git --recursive -b master
 ```
 
-After that, navigate to the `docker` directory. Log in to the user that you want the docker file to create in the container. Then, edit the `DOCKERFILE` to update these lines:
-- `ARG USERNAME=`: Your username
-- `ARG USER_UID=`: Output of `echo $UID`
-- `ARG USER_GID=`: Output of `id -g`
-
-Edit the `enter_container.sh` script with the following paths:
+After that, navigate to the `docker` directory. Log in to the user that you want the docker file to create in the container. Then, edit the `enter_container.sh` script with the following paths:
 - `DATA_DIR=`: The directory where the datasets are located
 - `WS_DIR=`: The directory of the ROS workspace
 

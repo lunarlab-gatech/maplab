@@ -2,11 +2,11 @@
 xhost +local:docker
 
 # Define directories
-DATA_DIR='/media/dbutterfield3/T73/'
-WS_DIR='/home/dbutterfield3/Research/ros_workspaces/maplab_ws/'
+DATA_DIR="/media/$(id -un)/T73/"
+WS_DIR="/home/$(id -un)/Research/ros_workspaces/maplab_ws/"
 
 docker run -it \
-    --name="maplab_2" \
+    --name="maplab_ubuntu20_noetic" \
     --gpus="all" \
     --network="host" \
     --privileged \
