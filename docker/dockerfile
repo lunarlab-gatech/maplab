@@ -108,3 +108,24 @@ RUN sudo apt update
 RUN sudo apt install tmux tmuxp -y
 RUN touch ~/.tmux.conf && \
     echo "set -g mouse on" >> ~/.tmux.conf
+
+# Install Miniconda (non-interactive, no auto-init)
+ENV MINICONDA_PATH=/opt/miniconda3
+ENV PYTHONPATH=""
+
+RUN sudo wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
+    sudo bash /tmp/miniconda.sh -b -p $MINICONDA_PATH && \
+    sudo rm /tmp/miniconda.sh
+
+# Disable auto-activation of conda base
+RUN $MINICONDA_PATH/bin/conda config --set auto_activate_base false
+
+# Accept Miniconda TOS and create Python 3.8 environment (Although same python, robotdataprocess needs different versions of some packages)
+RUN $MINICONDA_PATH/bin/conda config --set always_yes yes && \
+    $MINICONDA_PATH/bin/conda config --set changeps1 no && \
+    $MINICONDA_PATH/bin/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
+    $MINICONDA_PATH/bin/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r && \
+    $MINICONDA_PATH/bin/conda create -y -n robotdataprocess python=3.8
+
+# Restore PYTHONPATH for ROS
+ENV PYTHONPATH=/opt/ros/foxy/lib/python3.8/site-packages

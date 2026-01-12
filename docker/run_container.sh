@@ -2,7 +2,7 @@
 xhost +local:docker
 
 # Define directories
-DATA_DIR='/home/dbutterfield3/Desktop/data'
+DATA_DIR='/media/dbutterfield3/T73/'
 WS_DIR='/home/dbutterfield3/Research/ros_workspaces/maplab_ws/'
 
 docker run -it \

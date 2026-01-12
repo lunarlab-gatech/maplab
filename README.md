@@ -33,7 +33,18 @@ The rest of this README **assumes that you are inside the Docker container**. Fo
 
 ### Maplab Install
 
-Run these commands from the root directory of the ros workspace:
+First, install a python dependency by running the following commands from the root of the ros workspace:
+```
+cd src/maplab/dependencies/3rdparty/robotdataprocess/
+unset PYTHONPATH
+source /opt/miniconda3/bin/activate robotdataprocess
+pip install rospkg
+pip install .
+```
+
+Then, close the terminal to deactivate the `robotdataprocess` environment.
+
+Finally, run these commands from the root directory of the ros workspace:
 ```
 catkin init
 catkin config --merge-devel
