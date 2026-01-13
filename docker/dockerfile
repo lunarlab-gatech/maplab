@@ -129,4 +129,10 @@ RUN $MINICONDA_PATH/bin/conda config --set always_yes yes && \
     $MINICONDA_PATH/bin/conda create -y -n robotdataprocess python=3.8
 
 # Restore PYTHONPATH for ROS
-ENV PYTHONPATH=/opt/ros/foxy/lib/python3.8/site-packages
+ENV PYTHONPATH=/opt/ros/noetic/lib/python3.8/site-packages
+
+# Install rqt-graph for debugging
+RUN sudo apt update && sudo apt install ros-noetic-rqt-graph -y
+
+# Set the workspace directory
+WORKDIR /home/${USERNAME}/maplab_ws

@@ -1,7 +1,7 @@
 session_name: maplab_server_hercules
 
 environment:
-  DATASET_NUM: V2.0.1
+  DATASET_NUM: V2.1.0
 
 options:
   default-command: /bin/bash
@@ -22,13 +22,13 @@ windows:
     - mkdir -p /home/$(id -un)/data/Hercules_datasets/${DATASET_NUM}/results/maplab_results/rovioli/Husky2/
     - mkdir -p /home/$(id -un)/data/Hercules_datasets/${DATASET_NUM}/results/maplab_results/rovioli/Drone1/
     - mkdir -p /home/$(id -un)/data/Hercules_datasets/${DATASET_NUM}/results/maplab_results/rovioli/Drone2/
-    - roslaunch maplab_server_node hercules-maplab-server-robots.launch
+    - roslaunch maplab_server_node hercules-maplab-server-robots.launch dataset_number:=${DATASET_NUM}
   - shell_command:
     - rviz -d /home/$(id -un)/maplab_ws/src/maplab/applications/maplab-server-node/launch/hercules/ros/hercules-maplab-server-minimal.rviz
   - shell_command:
     - sleep 4
     - source /opt/miniconda3/bin/activate robotdataprocess
-    - python src/maplab/dependencies/3rdparty/robotdataprocess/examples/Hercules/publish_data_Maplab.py --dataset_num ${DATASET_NUM} --robot_name Husky1
+    - python src/maplab/dependencies/3rdparty/robotdataprocess/examples/Hercules/publish/publish_data_Maplab.py --dataset_num ${DATASET_NUM} --robot_name Husky1
 
 - window_name: kill
   layout: tiled
@@ -36,5 +36,4 @@ windows:
   - source /opt/ros/noetic/setup.bash
   - source /home/$(id -un)/maplab_ws/devel/setup.bash
   panes:
-  - echo "tmux kill-session -t maplab_server_hercules"
-  -
+  - tmux kill-session -t maplab_server_hercules_
