@@ -74,6 +74,7 @@ sensors:
     sensor_type: ODOMETRY_6DOF
     description: "ROVIOLI in Odometry mode"
     topic: /Husky1/rovioli/maplab_odom_T_M_I
+    # topic: /Husky1/rovioli/T_M_I
     T_St_Stp1_fixed_covariance:
       rows: 6
       cols: 6
@@ -84,6 +85,13 @@ sensors:
         - [0,0,0,0.0001,0,0]
         - [0,0,0,0,0.0001,0]
         - [0,0,0,0,0,0.0001]
+
+  - id: 11112222333344445555666677778888
+    sensor_type: LIDAR
+    description: "Simulated HERCULES LIDAR"
+    topic: /Husky1/lidar
+
+    
 
 extrinsics:
 
@@ -110,6 +118,16 @@ extrinsics:
         - [0,0,0,1]
 
   - sensor_id: 3333c3479caf7592b35518478a2fe08f
+    base_sensor_id: 3333acb41bfdfd6b7e1fac37c7cbe7bf
+    T_B_S:
+      rows: 4
+      cols: 4
+      data:
+        - [1,0,0,0]
+        - [0,1,0,0]
+        - [0,0,1,0]
+        - [0,0,0,1]
+  - sensor_id: 11112222333344445555666677778888
     base_sensor_id: 3333acb41bfdfd6b7e1fac37c7cbe7bf
     T_B_S:
       rows: 4

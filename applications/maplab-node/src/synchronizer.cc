@@ -733,13 +733,14 @@ void Synchronizer::releaseData() {
   {
     std::lock_guard<std::mutex> lock(
         mutex_times_last_camera_messages_received_or_checked_ns_);
-    const bool all_times_valid = std::all_of(
-        times_last_camera_messages_received_or_checked_ns_.begin(),
-        times_last_camera_messages_received_or_checked_ns_.end(),
-        [](int64_t time_ns) { return aslam::time::isValidTime(time_ns); });
-    if (all_times_valid) {
-      releaseCameraImages(oldest_timestamp_ns, newest_timestamp_ns);
-    }
+      const bool all_times_valid = std::all_of(
+          times_last_camera_messages_received_or_checked_ns_.begin(),
+          times_last_camera_messages_received_or_checked_ns_.end(),
+          [](int64_t time_ns) { return aslam::time::isValidTime(time_ns); });
+      if (all_times_valid) {
+      // if (0) {
+        releaseCameraImages(oldest_timestamp_ns, newest_timestamp_ns);
+      }
   }
 
   // Release (or drop) lidar measurements.

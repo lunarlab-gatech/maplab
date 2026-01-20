@@ -2,7 +2,7 @@
 
 <launch>
 	<arg name="user_name" default="$(env USER)" />
-	<arg name="dataset_number" default="V2.0.1"/>
+	<arg name="dataset_number" default="V2.2.0"/>
 
 	<arg name="hercules_playback_speed" default="1.0"/>
 	<arg name="hercules_bags_folder" default="/home/$(arg user_name)/data/Hercules_datasets/$(arg dataset_number)/extract/bags_for_maplab"/>

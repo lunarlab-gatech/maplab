@@ -40,7 +40,7 @@ abs_constraints_baseframe_ransac_num_interations:                     2000
 # DENSE MAPPING CONSTRAINTS/LOOP CLOSURES
 #########################################
 # Enable/disable dense mapping constraints based loop closure
-maplab_server_enable_lidar_loop_closure:                              false # Default true
+maplab_server_enable_lidar_loop_closure:                              true # Default true
 # Type of resource that are used to derive the dense mapping constraints, this
 # can be a CSV list of values. Meaningful options are:
 # kPointCloudXYZI = 21                    (Attaching raw VLP16/OS-1 lidar scans)
@@ -97,7 +97,7 @@ anchor_transform_min_inlier_count:                            5 # Default 10
 # is only accumulating point clouds of missions with known baseframe, i.e.
 # missions that either have absolute 6dof constraints (e.g. AprilTag) or
 # have been successfully anchored using visual loop closure.
-dense_depth_integrator_visualize_only_with_known_baseframe:           true
+dense_depth_integrator_visualize_only_with_known_baseframe:           false #Default true
 # Type of resources that are used to compose the dense map, options are:
 # kRawDepthMap = 8                        (Attaching lidar scans as depth maps)
 # kPointCloudXYZI = 21                    (Attaching raw VLP16/OS-1 lidar scans)
@@ -165,7 +165,7 @@ tf_abs_6dof_sensor_frame:                                             maplab_abs
 tf_odometry_6dof_sensor_frame:                                        maplab_odometry_6dof_sensor
 tf_wheel_odometry_sensor_frame:                                       maplab_wheel_odometry_sensor
 tf_lc_sensor_frame:                                                   maplab_lc_sensor
-tf_lidar_sensor_frame:                                                maplab_lidar_sensor
+tf_lidar_sensor_frame:                                                maplab_lidar
 tf_pointcloud_map_frame:                                              maplab_pointcloud_map
 tf_gps_wgs_sensor_frame:                                              maplab_gps_wgs_sensor
 tf_gps_utm_sensor_frame:                                              maplab_gps_utm_sensor
