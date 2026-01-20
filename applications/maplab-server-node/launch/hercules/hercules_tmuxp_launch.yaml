@@ -1,7 +1,7 @@
 session_name: maplab_server_hercules
 
 environment:
-  DATASET_NUM: V2.1.0
+  DATASET_NUM: V2.2.0
 
 options:
   default-command: /bin/bash

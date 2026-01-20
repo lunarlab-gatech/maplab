@@ -45,7 +45,7 @@
 			<remap from="/cam0/image_raw" to="/$(arg hercules_robot_name)/cam0/image_raw"/>
 		</node> -->
 
-		<include file="$(find maplab_server_node)/launch/hercules/hercules-maplab-node-w-rovioli.launch">
+		<include file="$(find maplab_server_node)/launch/hercules/hercules-maplab-node.launch">
 			<arg name="robot_name" default="$(arg hercules_robot_name)"/>
 			<arg name="robot_calib_file" default="hercules-$(arg hercules_robot_name).yaml"/>
 			<arg name="root_map_directory" default="$(arg hercules_root_map_directory)"/>
