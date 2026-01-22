@@ -28,7 +28,11 @@ The rest of this README **assumes that you are inside the Docker container**. Fo
 
 ### Maplab Install
 
-First, install a python dependency by running the following commands from the root of the ros workspace:
+First, run this command to ensure all submodules are ready:
+```
+git submodule update --init --recursive
+```
+Then, install a python dependency by running the following commands from the root of the ros workspace:
 ```
 cd src/maplab/dependencies/3rdparty/robotdataprocess/
 unset PYTHONPATH
