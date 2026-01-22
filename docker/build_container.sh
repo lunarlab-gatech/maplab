@@ -1,1 +1,5 @@
-docker build -t maplab_ubuntu20_noetic .
+docker build \
+  --build-arg USERNAME=$(id -un) \
+  --build-arg USER_UID=$(id -u) \
+  --build-arg USER_GID=$(id -g) \
+  -t maplab_ubuntu20_noetic .

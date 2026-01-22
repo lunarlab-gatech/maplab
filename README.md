@@ -14,12 +14,7 @@ Then, clone this repository into a `src` folder in a ros workspace on your compu
 git clone git@github.com:lunarlab-gatech/maplab.git --recursive -b master
 ```
 
-After that, navigate to the `docker` directory. Log in to the user that you want the docker file to create in the container. Then, edit the `DOCKERFILE` to update these lines:
-- `ARG USERNAME=`: Your username
-- `ARG USER_UID=`: Output of `echo $UID`
-- `ARG USER_GID=`: Output of `id -g`
-
-Edit the `enter_container.sh` script with the following paths:
+After that, navigate to the `docker` directory. Log in to the user that you want the docker file to create in the container. Then, edit the `enter_container.sh` script with the following paths:
 - `DATA_DIR=`: The directory where the datasets are located
 - `WS_DIR=`: The directory of the ROS workspace
 
@@ -33,7 +28,18 @@ The rest of this README **assumes that you are inside the Docker container**. Fo
 
 ### Maplab Install
 
-Run these commands from the root directory of the ros workspace:
+First, install a python dependency by running the following commands from the root of the ros workspace:
+```
+cd src/maplab/dependencies/3rdparty/robotdataprocess/
+unset PYTHONPATH
+source /opt/miniconda3/bin/activate robotdataprocess
+pip install rospkg
+pip install .
+```
+
+Then, close the terminal to deactivate the `robotdataprocess` environment.
+
+Finally, run these commands from the root directory of the ros workspace:
 ```
 catkin init
 catkin config --merge-devel
@@ -71,7 +77,6 @@ First, make changes to the following variables (to update data and user director
 ```
 hercules_bags_folder (applications/maplab-server-node/launch/hercules/hercules-maplab-server-robots.launch)
 hercules_root_map_directory (applications/maplab-server-node/launch/hercules/hercules-maplab-server-robots.launch)
-shell_command_before (applications/maplab-server-node/launch/hercules/hercules_tmuxp_launch.yaml)
 ```
 
 Then run the following command to run maplab:
