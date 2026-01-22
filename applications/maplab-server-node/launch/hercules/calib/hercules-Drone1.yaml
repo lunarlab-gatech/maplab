@@ -58,6 +58,10 @@ sensors:
         - [0,0,0,0.0001,0,0]
         - [0,0,0,0,0.0001,0]
         - [0,0,0,0,0,0.0001]
+  - id: aaaa2222333344445555666677778888
+    sensor_type: LIDAR
+    description: "Simulated HERCULES LIDAR"
+    topic: /Drone1/lidar
 
 extrinsics:
   - sensor_id: 1111bb8e4058621f7036b5e765dfe812
@@ -91,4 +95,15 @@ extrinsics:
         - [1,0,0,0]
         - [0,1,0,0]
         - [0,0,1,0]
+        - [0,0,0,1]
+  
+  - sensor_id: aaaa2222333344445555666677778888
+    base_sensor_id: 1111acb41bfdfd6b7e1fac37c7cbe7bf
+    T_B_S:
+      rows: 4
+      cols: 4
+      data:
+        - [1,0,0,0]
+        - [0,1,0,0]
+        - [0,0,1,-0.5]
         - [0,0,0,1]
