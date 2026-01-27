@@ -2,11 +2,11 @@
 xhost +local:docker
 
 # Define directories
-DATA_DIR="/media/$(id -un)/T73/"
-WS_DIR="/home/$(id -un)/Research/ros_workspaces/maplab_ws/"
+DATA_DIR="/media/$(id -un)/T7/GT/SLAM"
+WS_DIR="/home/$(id -un)/Documents/ros_workspaces/maplab_ws/"
 
 docker run -it \
-    --name="maplab_ubuntu20_noetic" \
+    --name="maplab_ubuntu20_noetic_2" \
     --shm-size=2gb \
     --gpus="all" \
     --network="host" \

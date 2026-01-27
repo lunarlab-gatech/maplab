@@ -4,7 +4,7 @@ options:
   default-command: /bin/bash
 
 environment:
-  DATASET_NUM: V2.2.0
+  DATASET_NUM: V2.3.C
 
 windows:
 - window_name: main
@@ -19,7 +19,7 @@ windows:
   - shell_command:
     - sleep 2
     - rosrun maplab_console maplab_console 
-    - load --map_folder /home/$(id -un)/data/Hercules_datasets/${DATASET_NUM}/results/maplab_results/maplab/merged_map
+    - load --map_folder /home/$(id -un)/data/Hercules_datasets/${DATASET_NUM}/results/maplab_results/merged_map
     - v
     - export_trajectory_to_csv
   - shell_command:
