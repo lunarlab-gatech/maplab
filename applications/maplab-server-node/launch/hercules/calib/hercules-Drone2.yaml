@@ -1,28 +1,26 @@
 sensors:
   - id: 2222acb41bfdfd6b7e1fac37c7cbe7bf
-    topic: /mh2/imu0
-    # topic: /imu0
-    description: "VI-Sensor IMU (ADIS16448)"
+    topic: /Drone2/imu0
+    description: "Synthetic IMU Sensor for HERCULES simulator"
     sensor_type: IMU
     sigmas:
-      acc_noise_density: 4e-3
-      acc_bias_random_walk_noise_density: 4e-3
-      gyro_noise_density: 1e-4
-      gyro_bias_random_walk_noise_density: 1e-4
+      acc_noise_density: 0.08
+      acc_bias_random_walk_noise_density: 4e-5
+      gyro_noise_density: 4e-3
+      gyro_bias_random_walk_noise_density: 2e-6
     saturation_accel_max_mps2: 150.0
     saturation_gyro_max_radps: 7.5
     gravity_magnitude_mps2: 9.81
 
   - id: 2222bb8e4058621f7036b5e765dfe812
     sensor_type: NCAMERA
-    description: "VISensor - Euroc - original_calibration"
+    description: "Simulated HERCULES Camera"
     topic: ""
     cameras:
       - camera:
-          topic: /mh2/cam0
-          # topic: /cam0
+          topic: /Drone2/cam0
           id: 2222b08e4058621f7036b5e765dfe812
-          description: "VI-Sensor cam0 (MT9M034)"
+          description: "cam0"
           sensor_type: CAMERA
           line-delay-nanoseconds: 0
           image_height: 480
@@ -31,27 +29,24 @@ sensors:
           intrinsics:
             cols: 1
             rows: 4
-            data: [458.6548807207614, 457.2966964634893, 367.2158039615726, 248.37534060980727]
+            data: [376, 376, 376, 240]
           distortion:
             type: radial-tangential
             parameters:
               cols: 1
               rows: 4
-              data: [-0.28340811217029355, 0.07395907389290132, 0.00019359502856909603,
-          1.7618711454538528e-05]
+              data: [0.0, 0.0, 0.0, 0.0]
         T_B_C:
           cols: 4
           rows: 4
-          data: [0.0148655429818, -0.999880929698, 0.00414029679422, -0.0216401454975,
-                 0.999557249008, 0.0149672133247, 0.025715529948, -0.064676986768,
-                -0.0257744366974, 0.00375618835797, 0.999660727178, 0.00981073058949,
-                 0.0, 0.0, 0.0, 1.0]
-
+          data: [ 0.    ,      0.17364818,  0.98480775,  0.35   ,   
+                  1.0,          0.,          0.  ,        -0.055,        
+                  0.,          0.98480775, -0.17364818,  0.2,
+                  0.,          0.,          0.,          1.        ]
       - camera:
-          topic: /mh2/cam1
-          # topic: /cam1
-          id: 2222b18e4058621f7036b5e765dfe812
-          description: "VI-Sensor cam1 (MT9M034)"
+          topic: /Drone2/cam1
+          id: 2222b08e4058621f7036b5e765dfe813
+          description: "cam1"
           sensor_type: CAMERA
           line-delay-nanoseconds: 0
           image_height: 480
@@ -60,25 +55,26 @@ sensors:
           intrinsics:
             cols: 1
             rows: 4
-            data: [457.5874266035361, 456.13442556023665, 379.9994465203525, 255.2381853862733]
+            data: [376, 376, 376, 240]
           distortion:
             type: radial-tangential
             parameters:
               cols: 1
               rows: 4
-              data: [-0.283683654496, 0.0745128430929, -0.000104738949098, -3.55590700274e-05]
+              data: [0.0, 0.0, 0.0, 0.0]
         T_B_C:
           cols: 4
           rows: 4
-          data: [0.0125552670891, -0.999755099723, 0.0182237714554, -0.0198435579556,
-                0.999598781151, 0.0130119051815, 0.0251588363115, 0.0453689425024,
-               -0.0253898008918, 0.0179005838253, 0.999517347078, 0.00786212447038,
-                0.0, 0.0, 0.0, 1.0]
+          data: [ 0.    ,      0.17364818,  0.98480775,  0.35   ,   
+                  1.0,          0.,          0.  ,       0.055,        
+                  0.,          0.98480775, -0.17364818,  0.2,
+                  0.,          0.,          0.,          1.        ]
+
 
   - id: 2222c479caf7592b35518478a2fe08fa
     sensor_type: ODOMETRY_6DOF
     description: "ROVIOLI in Odometry mode"
-    topic: /mh2/rovioli/maplab_odom_T_M_I
+    topic: /Drone2/rovioli/maplab_odom_T_M_I
     T_St_Stp1_fixed_covariance:
       rows: 6
       cols: 6
@@ -89,6 +85,10 @@ sensors:
         - [0,0,0,0.0001,0,0]
         - [0,0,0,0,0.0001,0]
         - [0,0,0,0,0,0.0001]
+  - id: bbbb2222333344445555666677778888
+    sensor_type: LIDAR
+    description: "Simulated HERCULES LIDAR"
+    topic: /Drone2/lidar
 
 extrinsics:
   - sensor_id: 2222bb8e4058621f7036b5e765dfe812
@@ -122,4 +122,14 @@ extrinsics:
         - [1,0,0,0]
         - [0,1,0,0]
         - [0,0,1,0]
+        - [0,0,0,1]
+  - sensor_id: bbbb2222333344445555666677778888
+    base_sensor_id: 2222acb41bfdfd6b7e1fac37c7cbe7bf
+    T_B_S:
+      rows: 4
+      cols: 4
+      data:
+        - [1,0,0,0]
+        - [0,1,0,0]
+        - [0,0,1,-0.5]
         - [0,0,0,1]
