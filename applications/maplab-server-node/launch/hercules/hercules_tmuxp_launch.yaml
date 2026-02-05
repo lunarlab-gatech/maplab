@@ -27,18 +27,18 @@ windows:
     - mkdir -p /home/$(id -un)/data/Hercules_datasets/${DATASET_NUM}/results/maplab_results/rovioli/Drone2/
     - roslaunch maplab_server_node hercules-maplab-server-robots.launch dataset_number:=${DATASET_NUM}
   - shell_command:
-    - rviz -d /home/$(id -un)/maplab_ws/src/maplab/applications/maplab-server-node/launch/hercules/ros/hercules-maplab-server-minimal.rviz
+    - rviz -d /home/$(id -un)/maplab_ws/src/maplab/applications/maplab-server-node/launch/hercules/ros/hercules-maplab-server-Drone1.rviz
   - shell_command:
     - sleep 4
     - source /opt/miniconda3/bin/activate robotdataprocess
-    - python /home/nisemono/maplab_ws/src/maplab/dependencies/3rdparty/robotdataprocess/examples/Hercules/publish/publish_data_Maplab.py --dataset_num ${DATASET_NUM} --robot_name Husky1
-  # - shell_command:
-  #   - sleep 4
-  #   - source /opt/miniconda3/bin/activate robotdataprocess
-  #   - python /home/nisemono/maplab_ws/src/maplab/dependencies/3rdparty/robotdataprocess/examples/Hercules/publish/publish_data_Maplab.py --dataset_num ${DATASET_NUM} --robot_name Husky2
+    - python /home/nisemono/maplab_ws/src/maplab/dependencies/3rdparty/robotdataprocess/examples/Hercules/publish/publish_data_Maplab.py --dataset_num ${DATASET_NUM} --robot_name Drone1
   - shell_command:
     - sleep 4
-    - rosrun tf2_ros static_transform_publisher 0 0 0 0 0 0 map mission
+    - source /opt/miniconda3/bin/activate robotdataprocess
+    - python /home/nisemono/maplab_ws/src/maplab/dependencies/3rdparty/robotdataprocess/examples/Hercules/publish/publish_data_Maplab.py --dataset_num ${DATASET_NUM} --robot_name Drone2
+  # - shell_command:
+  #   - sleep 4
+  #   - rosrun tf2_ros static_transform_publisher 0 0 0 0 0 0 map mission
 
 - window_name: kill
   layout: tiled
