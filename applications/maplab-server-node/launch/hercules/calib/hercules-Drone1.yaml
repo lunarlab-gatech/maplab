@@ -10,7 +10,7 @@ sensors:
       gyro_bias_random_walk_noise_density: 2e-6
     saturation_accel_max_mps2: 150.0
     saturation_gyro_max_radps: 7.5
-    gravity_magnitude_mps2: 9.81007
+    gravity_magnitude_mps2: -9.81007
 
   - id: 1111bb8e4058621f7036b5e765dfe812
     sensor_type: NCAMERA

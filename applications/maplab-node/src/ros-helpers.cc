@@ -158,6 +158,7 @@ vi_map::RosLidarMeasurement::Ptr convertRosCloudToMaplabCloud(
           sensor_id, static_cast<int64_t>(cloud_msg->header.stamp.toNSec())));
   *(lidar_measurement->getPointCloudMutable()) = *cloud_msg;
   // pcl::fromROSMsg(*cloud_msg, *(lidar_measurement->getPointCloudMutable()));
+  
   return lidar_measurement;
 }
 
