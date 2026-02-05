@@ -15,6 +15,7 @@
 #include <map-manager/map-manager.h>
 #include <resources-common/point-cloud.h>
 #include <vi-map/vi-map.h>
+#include <loop-closure-handler/loop-closure-handler.h>
 #include <visualization/resource-visualization.h>
 #include <visualization/viwls-graph-plotter.h>
 
@@ -167,8 +168,15 @@ class MaplabServerNode final {
   // submap thread and summarizes it.
   std::thread status_thread_;
 
-  // Exporting Map
-  void exportLoopClosures();
+  // Exporting loop closure results to JSON.
+  void exportLoopClosures(
+      const vi_map::MissionId& mission_id_database,
+      const vi_map::MissionId& mission_id_query,
+      const vi_map::LoopClosureConstraintVector& inlier_constraints,
+      const loop_closure_handler::LoopClosureHandler::
+          MergedLandmark3dPositionVector& landmark_pairs_merged,
+      const pose::Transformation& T_G_M_estimate,
+      const vi_map::VIMap& map);
 
   // Map management
   /////////////////
@@ -245,6 +253,9 @@ class MaplabServerNode final {
   // submaps at the the last time the trust region has been
   // reset.
   uint32_t num_submaps_at_last_trust_region_reset = 0;
+
+  // Counter for exported loop closure entries (merging thread only).
+  uint32_t loop_closure_export_counter_ = 0;
 
   // Protects the whole server from concurrent access from the outside.
   mutable std::mutex mutex_;

@@ -19,11 +19,16 @@
 #include <vi-map-helpers/vi-map-landmark-quality-evaluation.h>
 #include <vi-map-helpers/vi-map-manipulation.h>
 #include <vi-map/landmark-quality-metrics.h>
+#include <loop-closure-handler/loop-detector-node.h>
 #include <visualization/spatially-distribute-missions.h>
 
 #include <atomic>
+#include <chrono>
+#include <fstream>
 #include <memory>
 #include <string>
+
+#include "json.hpp"
 
 DECLARE_bool(ros_free);
 DECLARE_uint64(elq_min_observers);
@@ -114,6 +119,17 @@ DEFINE_bool(
     maplab_server_spatially_distribute_missions, true,
     "Spatially distribute missions from robots that have not yet been merged "
     "into the main map. See flags \"spatially_*\" for more options.");
+
+DEFINE_string(
+    maplab_server_loop_closure_export_path, "",
+    "If non-empty, inter-robot loop closure results are exported to this "
+    "JSON file.");
+
+DEFINE_bool(
+    maplab_server_export_only_inter_robot_lc, true,
+    "If true, only inter-robot (cross-robot) loop closures are exported.");
+
+DECLARE_bool(lc_insert_lc_edge_instead_of_merging);
 
 namespace maplab {
 MaplabServerNode::MaplabServerNode()
@@ -714,6 +730,13 @@ void MaplabServerNode::runOneIterationOfMapMergingAlgorithms() {
           running_merging_process_mutex_);
       running_merging_process_ = "visual loop closure";
     }
+
+    const bool kAddLoopclosureEdges =
+        FLAGS_lc_insert_lc_edge_instead_of_merging;
+    const bool kMergeLandmarks = !kAddLoopclosureEdges;
+    const bool export_enabled =
+        !FLAGS_maplab_server_loop_closure_export_path.empty();
+
     vi_map::MissionIdList::const_iterator mission_ids_end = mission_ids.cend();
     for (vi_map::MissionIdList::const_iterator it = mission_ids.cbegin();
          it != mission_ids_end; ++it) {
@@ -728,8 +751,8 @@ void MaplabServerNode::runOneIterationOfMapMergingAlgorithms() {
         loop_detector.instantiateVisualizer();
       }
       loop_detector.addMissionToDatabase(mission_id_A, *map);
-      for (vi_map::MissionIdList::const_iterator jt = it; jt != mission_ids_end;
-           ++jt) {
+      for (vi_map::MissionIdList::const_iterator jt = it;
+           jt != mission_ids_end; ++jt) {
         const vi_map::MissionId& mission_id_B = *jt;
 
         const bool baseframe_B_is_known =
@@ -745,7 +768,45 @@ void MaplabServerNode::runOneIterationOfMapMergingAlgorithms() {
           }
         }
 
-        loop_detector.detectLoopClosuresAndMergeLandmarks(*jt, map.get());
+        // Call the underlying function directly to capture results.
+        pose::Transformation T_G_M2;
+        vi_map::LoopClosureConstraintVector inlier_constraints;
+        loop_closure_handler::LoopClosureHandler::
+            MergedLandmark3dPositionVector landmark_pairs_merged;
+        const bool found_loop_closures =
+            loop_detector.detectLoopClosuresMissionToDatabase(
+                *jt, kMergeLandmarks, kAddLoopclosureEdges, map.get(),
+                &T_G_M2, &inlier_constraints, &landmark_pairs_merged);
+
+        // Export loop closure results if enabled.
+        if (export_enabled && found_loop_closures &&
+            !inlier_constraints.empty()) {
+          const vi_map::MissionId& mission_id_database = mission_id_A;
+          const vi_map::MissionId& mission_id_query = *jt;
+
+          // Determine robot names for both missions.
+          std::string robot_database;
+          std::string robot_query;
+          {
+            std::lock_guard<std::mutex> lock(robot_to_mission_id_map_mutex_);
+            auto it_db = mission_id_to_robot_map_.find(mission_id_database);
+            auto it_q = mission_id_to_robot_map_.find(mission_id_query);
+            if (it_db != mission_id_to_robot_map_.end()) {
+              robot_database = it_db->second;
+            }
+            if (it_q != mission_id_to_robot_map_.end()) {
+              robot_query = it_q->second;
+            }
+          }
+
+          const bool is_inter_robot = (robot_database != robot_query);
+          if (!FLAGS_maplab_server_export_only_inter_robot_lc ||
+              is_inter_robot) {
+            exportLoopClosures(
+                mission_id_database, mission_id_query, inlier_constraints,
+                landmark_pairs_merged, T_G_M2, *map);
+          }
+        }
       }
     }
   }
@@ -1599,6 +1660,115 @@ bool MaplabServerNode::getDenseMapInRange(
       integration_function, get_resources_in_radius);
 
   return true;
+}
+
+void MaplabServerNode::exportLoopClosures(
+    const vi_map::MissionId& mission_id_database,
+    const vi_map::MissionId& mission_id_query,
+    const vi_map::LoopClosureConstraintVector& inlier_constraints,
+    const loop_closure_handler::LoopClosureHandler::
+        MergedLandmark3dPositionVector& landmark_pairs_merged,
+    const pose::Transformation& T_G_M_estimate,
+    const vi_map::VIMap& map) {
+  if (FLAGS_maplab_server_loop_closure_export_path.empty()) {
+    return;
+  }
+
+  // Look up robot names.
+  std::string robot_database;
+  std::string robot_query;
+  {
+    std::lock_guard<std::mutex> lock(robot_to_mission_id_map_mutex_);
+    auto it_db = mission_id_to_robot_map_.find(mission_id_database);
+    auto it_q = mission_id_to_robot_map_.find(mission_id_query);
+    if (it_db != mission_id_to_robot_map_.end()) {
+      robot_database = it_db->second;
+    }
+    if (it_q != mission_id_to_robot_map_.end()) {
+      robot_query = it_q->second;
+    }
+  }
+
+  // Build JSON entry.
+  nlohmann::json entry;
+  entry["id"] = loop_closure_export_counter_++;
+
+  const auto now = std::chrono::system_clock::now();
+  const auto epoch = now.time_since_epoch();
+  const double timestamp_s =
+      std::chrono::duration<double>(epoch).count();
+  entry["timestamp_s"] = timestamp_s;
+
+  entry["robot_database"] = robot_database;
+  entry["robot_query"] = robot_query;
+  entry["mission_id_database"] = mission_id_database.hexString();
+  entry["mission_id_query"] = mission_id_query.hexString();
+
+  // Count total inlier matches across all constraints.
+  size_t total_inlier_matches = 0;
+  for (const auto& constraint : inlier_constraints) {
+    total_inlier_matches += constraint.structure_matches.size();
+  }
+  entry["num_vertices_localized"] = inlier_constraints.size();
+  entry["total_inlier_matches"] = total_inlier_matches;
+
+  // T_G_M_estimate as position + quaternion.
+  const Eigen::Vector3d& position = T_G_M_estimate.getPosition();
+  const Eigen::Quaterniond& quat =
+      T_G_M_estimate.getRotation().toImplementation();
+  entry["T_G_M_estimate"] = {
+      {"position", {{"x", position.x()},
+                    {"y", position.y()},
+                    {"z", position.z()}}},
+      {"orientation_quat", {{"w", quat.w()},
+                            {"x", quat.x()},
+                            {"y", quat.y()},
+                            {"z", quat.z()}}}};
+
+  // Landmark pairs merged.
+  entry["num_landmarks_merged"] = landmark_pairs_merged.size();
+  nlohmann::json landmark_pairs_json = nlohmann::json::array();
+  for (const auto& pair : landmark_pairs_merged) {
+    landmark_pairs_json.push_back({
+        {"query_pos",
+         {pair.first.x(), pair.first.y(), pair.first.z()}},
+        {"database_pos",
+         {pair.second.x(), pair.second.y(), pair.second.z()}}});
+  }
+  entry["landmark_pairs_merged"] = landmark_pairs_json;
+
+  // Per-constraint vertex details.
+  nlohmann::json constraints_json = nlohmann::json::array();
+  for (const auto& constraint : inlier_constraints) {
+    nlohmann::json c;
+    c["query_vertex_id"] = constraint.query_vertex_id.hexString();
+    c["num_matches"] = constraint.structure_matches.size();
+    // Include the mission of the query vertex if available.
+    if (map.hasVertex(constraint.query_vertex_id)) {
+      c["mission_id"] =
+          map.getVertex(constraint.query_vertex_id).getMissionId().hexString();
+    }
+    constraints_json.push_back(c);
+  }
+  entry["constraints"] = constraints_json;
+
+  // Use a file-scoped JSON array to accumulate entries across calls.
+  static nlohmann::json lc_export_array = nlohmann::json::array();
+  lc_export_array.push_back(entry);
+
+  // Write to file.
+  std::ofstream ofs(FLAGS_maplab_server_loop_closure_export_path);
+  if (ofs.is_open()) {
+    ofs << lc_export_array.dump(2) << std::endl;
+    ofs.close();
+    LOG(INFO) << "[MaplabServerNode] Exported loop closure #"
+              << entry["id"].get<uint32_t>() << " ("
+              << robot_database << " <-> " << robot_query << ") to "
+              << FLAGS_maplab_server_loop_closure_export_path;
+  } else {
+    LOG(ERROR) << "[MaplabServerNode] Failed to open loop closure export file: "
+               << FLAGS_maplab_server_loop_closure_export_path;
+  }
 }
 
 }  // namespace maplab
