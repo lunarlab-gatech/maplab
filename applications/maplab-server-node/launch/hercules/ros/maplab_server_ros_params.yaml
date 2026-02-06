@@ -135,7 +135,7 @@ ba_include_absolute_pose_constraints:                                 false
 ba_include_6dof_odometry:                                             false
 #Combo 1
 # fine tuned parameters -------------------------
-ba_fix_vertices: true
+ba_fix_vertices: false
 ba_fix_landmark_positions: false
 # ba_include_inertial: false
 # fine tuned parameters -------------------------
@@ -192,7 +192,7 @@ tf_imu_refined_frame:                                                 maplab_imu
 #####################
 # If set to a file path, inter-robot loop closure results are exported to
 # this JSON file at runtime.
-maplab_server_loop_closure_export_path:                               "" # Set to a path to enable export
+maplab_server_loop_closure_export_path:                               "/home/nisemono/data/Hercules_datasets/V2.3.C/results/maplab_results/maplab_loop_closures.json" # Set to a path to enable export
 # If true, only inter-robot (cross-robot) loop closures are exported.
 maplab_server_export_only_inter_robot_lc:                             true
 
@@ -202,8 +202,15 @@ maplab_server_export_only_inter_robot_lc:                             true
 disable_consistency_check:                                            true
 alsologtostderr:                                                      true
 colorlogtostderr:                                                     true
-v: 0
+v: 3
 vis_default_namespace:                                                maplab_server_rviz
-show_progress_bar:                                                    false
+show_progress_bar:                                                    true
 spatially_distribute_missions_meters:                                 20
 spatially_distribute_missions_around_circle:                          true
+
+
+
+elq_min_observers:                        4    # you have 2, default is 4
+elq_min_observation_angle_deg:            8    # you have 5, increase for better depth
+elq_max_distance_from_closest_observer:   40   # you have 20, default 40 is fine
+elq_min_distance_from_closest_observer:   0.1
