@@ -1,0 +1,141 @@
+sensors:
+  - id: 3333acb41bfdfd6b7e1fac37c7cbe7bf
+    topic: /Husky1/imu0
+    description: "Synthetic IMU Sensor for HERCULES simulator"
+    sensor_type: IMU
+    sigmas:
+      acc_noise_density: 0.08
+      acc_bias_random_walk_noise_density: 4e-5
+      gyro_noise_density: 4e-3
+      gyro_bias_random_walk_noise_density: 2e-6
+    saturation_accel_max_mps2: 150.0
+    saturation_gyro_max_radps: 7.5
+    gravity_magnitude_mps2: 9.81
+
+  - id: 3333bb8e4058621f7036b5e765dfe812
+    sensor_type: NCAMERA
+    description: "Simulated HERCULES Camera"
+    topic: ""
+    cameras:
+      - camera:
+          topic: /Husky1/cam0
+          id: 3333b062fa109c40fe90b29a59dd7798
+          description: "cam0"
+          sensor_type: CAMERA
+          line-delay-nanoseconds: 0
+          image_height: 480
+          image_width: 752
+          type: pinhole
+          intrinsics:
+            cols: 1
+            rows: 4
+            data: [376, 376, 376, 240]
+          distortion:
+            type: radial-tangential
+            parameters:
+              cols: 1
+              rows: 4
+              data: [0.0, 0.0, 0.0, 0.0]
+        T_B_C:
+          cols: 4
+          rows: 4
+          data: [0., 0., 1., 0,
+                 1., 0., 0., -0.055,
+                 0., 1., 0., -0.85,
+                 0., 0., 0., 1.]
+      - camera:
+          topic: /Husky1/cam1
+          id: 3333b062fa109c40fe90b29a59dd3333
+          description: "cam1"
+          sensor_type: CAMERA
+          line-delay-nanoseconds: 0
+          image_height: 480
+          image_width: 752
+          type: pinhole
+          intrinsics:
+            cols: 1
+            rows: 4
+            data: [376, 376, 376, 240]
+          distortion:
+            type: radial-tangential
+            parameters:
+              cols: 1
+              rows: 4
+              data: [0.0, 0.0, 0.0, 0.0]
+        T_B_C:
+          cols: 4
+          rows: 4
+          data: [0., 0., 1., 0,
+                 1., 0., 0., 0.055,
+                 0., 1., 0., -0.85,
+                 0., 0., 0., 1.]
+
+  - id: 3333c3479caf7592b35518478a2fe08f
+    sensor_type: ODOMETRY_6DOF
+    description: "ROVIOLI in Odometry mode"
+    topic: /Husky1/rovioli/maplab_odom_T_M_I
+    # topic: /Husky1/rovioli/T_M_I
+    T_St_Stp1_fixed_covariance:
+      rows: 6
+      cols: 6
+      data:
+        - [0.001,0,0,0,0,0]
+        - [0,0.001,0,0,0,0]
+        - [0,0,0.001,0,0,0]
+        - [0,0,0,0.0001,0,0]
+        - [0,0,0,0,0.0001,0]
+        - [0,0,0,0,0,0.0001]
+
+  - id: 11112222333344445555666677778888
+    sensor_type: LIDAR
+    description: "Simulated HERCULES LIDAR"
+    topic: /Husky1/lidar
+
+
+    
+
+extrinsics:
+
+  - sensor_id: 3333bb8e4058621f7036b5e765dfe812
+    base_sensor_id: 3333acb41bfdfd6b7e1fac37c7cbe7bf
+    T_B_S:
+      cols: 4
+      rows: 4
+      data:
+        - [1,0,0,0]
+        - [0,1,0,0]
+        - [0,0,1,0]
+        - [0,0,0,1]
+
+  - sensor_id: 3333acb41bfdfd6b7e1fac37c7cbe7bf
+    base_sensor_id: 3333acb41bfdfd6b7e1fac37c7cbe7bf
+    T_B_S:
+      rows: 4
+      cols: 4
+      data:
+        - [1,0,0,0]
+        - [0,1,0,0]
+        - [0,0,1,0]
+        - [0,0,0,1]
+
+  - sensor_id: 3333c3479caf7592b35518478a2fe08f
+    base_sensor_id: 3333acb41bfdfd6b7e1fac37c7cbe7bf
+    T_B_S:
+      rows: 4
+      cols: 4
+      data:
+        - [1,0,0,0]
+        - [0,1,0,0]
+        - [0,0,1,0]
+        - [0,0,0,1]
+      
+  - sensor_id: 11112222333344445555666677778888
+    base_sensor_id: 3333acb41bfdfd6b7e1fac37c7cbe7bf
+    T_B_S:
+      rows: 4
+      cols: 4
+      data:
+        - [ 1.0, 0.0, 0.0, 0.0]
+        - [ 0.0, 1.0, 0.0, 0.0]
+        - [ 0.0, 0.0, 1.0, -0.85]
+        - [ 0.0, 0.0, 0.0, 1.0]

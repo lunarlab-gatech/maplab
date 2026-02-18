@@ -20,6 +20,7 @@
 	<depend>maplab_msgs</depend>
 	<depend>maplab_ros_common</depend>
 	<depend>maplab_test_data</depend>
+	<depend>loop_closure_handler</depend>
 	<depend>vi_map</depend>
 	<depend>visualization</depend>
 

@@ -1,6 +1,7 @@
 sensors:
   - id: 1111acb41bfdfd6b7e1fac37c7cbe7bf
     topic: /mh1/imu0
+    # topic: /imu0
     description: "VI-Sensor IMU (ADIS16448)"
     sensor_type: IMU
     sigmas:
@@ -19,6 +20,7 @@ sensors:
     cameras:
       - camera:
           topic: /mh1/cam0
+          # topic: /cam0
           id: 1111b062fa109c40fe90b29a59dd7798
           description: "VI-Sensor cam0 (MT9M034)"
           sensor_type: CAMERA
@@ -35,8 +37,7 @@ sensors:
             parameters:
               cols: 1
               rows: 4
-              data: [-0.28340811217029355, 0.07395907389290132, 0.00019359502856909603,
-          1.7618711454538528e-05]
+              data: [-0.28340811217029355, 0.07395907389290132, 0.00019359502856909603, 1.7618711454538528e-05]
         T_B_C:
           cols: 4
           rows: 4
@@ -47,6 +48,7 @@ sensors:
 
       - camera:
           topic: /mh1/cam1
+          # topic: /cam1
           id: 1111b162fa109c40fe90b29a59dd7723
           description: "VI-Sensor cam1 (MT9M034)"
           sensor_type: CAMERA
