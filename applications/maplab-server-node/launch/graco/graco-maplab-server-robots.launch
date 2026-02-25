@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="playback_speed" default="1.0"/>
+    <arg name="map_dir" default="/home/sidgirase/data/graco_maps"/>
+    <arg name="data_dir" default="/home/sidgirase/data"/>
+
+    <group>
+        <arg name="robot_name" default="ground1"/>
+        <node pkg="rosbag" type="play" name="rosbag_ground1" args="$(arg data_dir)/ground-01.bag -q -d 2 -r $(arg playback_speed)">
+            <remap from="/imu0" to="/ground1/imu0"/>
+            <remap from="/camera_left/image_raw" to="/ground1/cam0/image_raw"/>
+            <remap from="/camera_right/image_raw" to="/ground1/cam1/image_raw"/>
+            <remap from="/gnss/imu" to="/ground1/imu0"/>
+        </node>
+        <include file="$(find maplab_server_node)/launch/euroc/euroc-maplab-node-w-rovioli.launch">
+            <arg name="robot_name" value="ground1"/>
+            <arg name="robot_calib_file" value="graco-stereo.yaml"/>
+            <arg name="root_map_directory" value="$(arg map_dir)"/>
+        </include>
+    </group>
+
+    <group>
+        <arg name="robot_name" default="ground6"/>
+        <node pkg="rosbag" type="play" name="rosbag_ground6" args="$(arg data_dir)/ground-06.bag -q -d 2 -r $(arg playback_speed)">
+            <remap from="/imu0" to="/ground6/imu0"/>
+            <remap from="/camera_left/image_raw" to="/ground6/cam0/image_raw"/>
+            <remap from="/camera_right/image_raw" to="/ground6/cam1/image_raw"/>
+            <remap from="/gnss/imu" to="/ground6/imu0"/>
+        </node>
+        <include file="$(find maplab_server_node)/launch/euroc/euroc-maplab-node-w-rovioli.launch">
+            <arg name="robot_name" value="ground6"/>
+            <arg name="robot_calib_file" value="graco-stereo.yaml"/>
+            <arg name="root_map_directory" value="$(arg map_dir)"/>
+        </include>
+    </group>
+</launch>

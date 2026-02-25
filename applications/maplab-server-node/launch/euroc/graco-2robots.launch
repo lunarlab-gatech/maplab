@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<launch>
+    <param name="/use_sim_time" value="true"/>
+    <arg name="playback_speed" default="0.1"/>
+    
+    <arg name="bags_folder" default="/home/sidgirase/maplab_ws/maplab_data/graco"/>
+    <arg name="calib_file" default="/home/sidgirase/maplab_ws/maplab_data/graco/ground-calibration/graco-fixed-calib.yaml"/>
+
+    <group>
+        <arg name="robot_name" default="ground01"/>
+        <node pkg="rosbag" type="play" name="rosbag_$(arg robot_name)" args="--clock $(arg bags_folder)/ground-01.bag -r $(arg playback_speed)">
+            <remap from="/imu0" to="/$(arg robot_name)/imu0"/>
+            <remap from="/cam0/image_raw" to="/$(arg robot_name)/cam0/image_raw"/>
+            <remap from="/cam1/image_raw" to="/$(arg robot_name)/cam1/image_raw"/>
+        </node>
+        <include file="$(find maplab_server_node)/launch/euroc/euroc-maplab-node-w-rovioli.launch">
+            <arg name="robot_name" default="$(arg robot_name)"/>
+        </include>
+    </group>
+
+    <group>
+        <arg name="robot_name" default="ground06"/>
+        <node pkg="rosbag" type="play" name="rosbag_$(arg robot_name)" args="--clock $(arg bags_folder)/ground-06.bag -r $(arg playback_speed)">
+            <remap from="/imu0" to="/$(arg robot_name)/imu0"/>
+            <remap from="/cam0/image_raw" to="/$(arg robot_name)/cam0/image_raw"/>
+            <remap from="/cam1/image_raw" to="/$(arg robot_name)/cam1/image_raw"/>
+        </node>
+        <include file="$(find maplab_server_node)/launch/euroc/euroc-maplab-node-w-rovioli.launch">
+            <arg name="robot_name" default="$(arg robot_name)"/>
+        </include>
+    </group>
+
+    <include file="$(find maplab_server_node)/launch/euroc/euroc-maplab-server-base-station.launch">
+    </include>
+</launch>

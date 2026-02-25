@@ -1,0 +1,33 @@
+session_name: maplab_server_graco
+options:
+  default-command: /bin/bash
+windows:
+- window_name: roscore
+  layout: tiled
+  shell_command_before:
+  - source /opt/ros/noetic/setup.bash
+  panes:
+  - roscore
+- window_name: main
+  layout: tiled
+  focus: true
+  shell_command_before:
+  - source /opt/ros/noetic/setup.bash
+  - source /home/sidgirase/maplab_ws/devel/setup.bash
+  panes:
+  - shell_command:
+    - sleep 10
+    - roslaunch maplab_server_node euroc-maplab-server-base-station.launch
+  - shell_command:
+    - sleep 12
+    - roslaunch maplab_server_node graco-maplab-server-robots.launch
+  - shell_command:
+    - sleep 15
+    - rviz -d /home/sidgirase/maplab_ws/src/maplab/applications/maplab-server-node/launch/euroc/ros/euroc-maplab-server-minimal.rviz
+- window_name: kill
+  layout: tiled
+  shell_command_before:
+  - source /opt/ros/noetic/setup.bash
+  - source /home/sidgirase/maplab_ws/devel/setup.bash
+  panes:
+  - echo "tmux kill-session -t maplab_server_graco"
