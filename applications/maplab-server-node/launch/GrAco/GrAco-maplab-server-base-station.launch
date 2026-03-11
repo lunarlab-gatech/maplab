@@ -1,0 +1,15 @@
+<?xml version="2.0"?>
+
+<launch>
+	<arg name="root_map_directory" default="/home/$(env USER)/data/Data/GrAco_dataset/V1.0/results/maplab_results"/>
+
+	<!-- MAPLAB SERVER -->
+	<group ns="maplab_server">
+		<node name="maplab_server_node" pkg="maplab_server_node" type="maplab_server_node" output="screen" clear_params="true">
+            <!--This file contains the hyperparameters for maplab-->
+			<rosparam command="load" file="$(find maplab_server_node)/launch/GrAco/ros/maplab_server_ros_params.yaml"/>
+			<param name="maplab_server_merged_map_folder" value="$(arg root_map_directory)/merged_map"/>
+			<param name="maplab_server_map_update_topic" value="/ground1/update"/>
+		</node>
+	</group>
+</launch>

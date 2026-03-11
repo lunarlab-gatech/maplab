@@ -73,13 +73,17 @@ class LoopDetectorNode final {
       const MissionId& mission_id, const bool merge_landmarks,
       const bool add_lc_edges, vi_map::VIMap* map,
       pose::Transformation* T_G_M_estimate,
-      vi_map::LoopClosureConstraintVector* inlier_constraints) const;
+      vi_map::LoopClosureConstraintVector* inlier_constraints,
+      loop_closure_handler::LoopClosureHandler::MergedLandmark3dPositionVector*
+          merged_landmark_pairs_output = nullptr) const;
 
   bool detectLoopClosuresVerticesToDatabase(
       const pose_graph::VertexIdList& vertices, const bool merge_landmarks,
       const bool add_lc_edges, vi_map::VIMap* map,
       pose::Transformation* T_G_M_estimate,
-      vi_map::LoopClosureConstraintVector* inlier_constraints) const;
+      vi_map::LoopClosureConstraintVector* inlier_constraints,
+      loop_closure_handler::LoopClosureHandler::MergedLandmark3dPositionVector*
+          merged_landmark_pairs_output = nullptr) const;
 
   void instantiateVisualizer();
 

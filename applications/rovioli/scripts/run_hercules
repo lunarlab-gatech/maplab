@@ -1,0 +1,11 @@
+export LOCALIZATION_MAP_OUTPUT=/data/rovioli
+rosrun rovioli rovioli \
+  --alsologtostderr=1 \
+  --v=2 \
+  --sensor_calibration_file=$ROVIO_CONFIG_DIR/drone1_config.yaml \
+  --external_imu_parameters_rovio=$ROVIO_CONFIG_DIR/drone1_imu.yaml \
+  --datasource_type="rostopic" \
+  --save_map_folder=$LOCALIZATION_MAP_OUTPUT \
+  --map_builder_save_image_as_resources=false \
+  --optimize_map_to_localization_map=false \
+  --vio_nframe_sync_tolerance_ns=1000000

@@ -769,7 +769,9 @@ bool LoopDetectorNode::detectLoopClosuresMissionToDatabase(
     const MissionId& mission_id, const bool merge_landmarks,
     const bool add_lc_edges, vi_map::VIMap* map,
     pose::Transformation* T_G_M_estimate,
-    vi_map::LoopClosureConstraintVector* inlier_constraints) const {
+    vi_map::LoopClosureConstraintVector* inlier_constraints,
+    loop_closure_handler::LoopClosureHandler::MergedLandmark3dPositionVector*
+        merged_landmark_pairs_output) const {
   CHECK(map->hasMission(mission_id));
   pose_graph::VertexIdList vertices;
   map->getAllVertexIdsInMission(mission_id, &vertices);
@@ -781,14 +783,16 @@ bool LoopDetectorNode::detectLoopClosuresMissionToDatabase(
 
   return detectLoopClosuresVerticesToDatabase(
       vertices, merge_landmarks, add_lc_edges, map, T_G_M_estimate,
-      inlier_constraints);
+      inlier_constraints, merged_landmark_pairs_output);
 }
 
 bool LoopDetectorNode::detectLoopClosuresVerticesToDatabase(
     const pose_graph::VertexIdList& vertices, const bool merge_landmarks,
     const bool add_lc_edges, vi_map::VIMap* map,
     pose::Transformation* T_G_M_estimate,
-    vi_map::LoopClosureConstraintVector* inlier_constraints) const {
+    vi_map::LoopClosureConstraintVector* inlier_constraints,
+    loop_closure_handler::LoopClosureHandler::MergedLandmark3dPositionVector*
+        merged_landmark_pairs_output) const {
   CHECK(!vertices.empty());
   CHECK_NOTNULL(map);
   CHECK_NOTNULL(T_G_M_estimate)->setIdentity();
@@ -871,6 +875,11 @@ bool LoopDetectorNode::detectLoopClosuresVerticesToDatabase(
   common::ParallelProcess(
       vertices.size(), query_helper, kAlwaysParallelize, num_threads);
   timing_mission_lc.Stop();
+
+  // Copy merged landmark pairs to output if requested.
+  if (merged_landmark_pairs_output != nullptr) {
+    *merged_landmark_pairs_output = landmark_pairs_merged;
+  }
 
   VLOG(1) << "Searched " << vertices.size() << " frames.";
 
